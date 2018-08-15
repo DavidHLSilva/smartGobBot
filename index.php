@@ -148,7 +148,7 @@ function JsonReturn($Info,$sender,$modulo)
 			}
 			else
 			{
-				$image="http://vast-mesa-86756.herokuapp.com/imagenes/Climas_bot/".$Info->image;
+				$image="http://ancient-brushlands-87186.herokuapp.com/imagenes/Climas_bot/".$Info->image;
 
 				$title=$Info->name." ".$Info->temperatura."°C";
 				$subtitle=$Info->imecaPoints.' IMECA\nCalidad del Aire '.$Info->indice.'\n'.$Info->recomendacion;
