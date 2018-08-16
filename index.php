@@ -397,7 +397,7 @@ function getInfoCorralon($jsonCorralon)
 //Consula a la api de CORRALONES
 function consultaCorralon($placas)
 {
-	$url="http://201.144.220.174/mipoliciaws/corralon/busca_placa/".$placas;
+	$url="http://148.206.32.60/whbot/test.php?connect-corralon&placas=".$placas;
 	$ch=curl_init($url);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 	$result=curl_exec($ch);
@@ -511,7 +511,7 @@ function ReturnMessage($witEntities,$sender,$access_token)
 
 function Principal()
 {
-	$access_token="EAADlwZCSgxfgBADrTbHNvFmcuINfbDVhF2McHMdwzzT6CYrTxT27qaqDSQrCPTIAt1xfgopfZAJNZAJR5JlQM94CRajdpPmfw0zKd5BCVBVNnG4rHGlvm6wQX6lh3NZAJP9C3UWuqxDvC10l6IaTGqz9M4lbzZAykLyvukmrlRv70TE7ytKCE";
+	$access_token="EAADlwZCSgxfgBAJyJGZBAkadbagQRW9ZBpICSaJdeOByzdIzzKkrV2tJ2SxBzkSgo6NaRR2U0wzAPM2iZAPUHMZCPxgqldyeJnEXLZBEeEzYsb1MUzAT9Qvh9u2M6DbWFwDcwBTbpqSTqKIsgeWu3NLukpsveAZB0uxPsNxmMrBXE8140vXJERM";
 
 	$verify_token="SmartCDMX";
 	$hub_verify_token=null;
