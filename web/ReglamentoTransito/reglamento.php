@@ -889,11 +889,11 @@
 					{
 						$desc_fila=$jsonReglamento[$articulo_index]['tabla'][0]['filas'][0][0];
 						$fracciones=$jsonReglamento[$articulo_index]['tabla'][0]['filas'][$i+1][0];
-						$sanciones=$sanciones.''.$desc_fila.':'.$fracciones.'\n$'.$multa_min.' a $'.$multa_max;
+						$sanciones=$sanciones.''.$desc_fila.':'.$fracciones.'\n$'.$multa_min.' a $'.$multa_max.'\n';
 					}
 					else
 					{
-						$sanciones=$sanciones.'$'.$multa_min.' a $'.$multa_max;
+						$sanciones=$sanciones.'$'.$multa_min.' a $'.$multa_max.'\n';
 					}
 				}
 			}
