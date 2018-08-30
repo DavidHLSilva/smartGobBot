@@ -438,6 +438,18 @@ function JsonReturnSancionesReglamento($Info,$sender,$modulo)
 					}
 				}';
 			break;
+		case 'remision_art':
+			$jsonData='{
+					"recipient":
+					{
+						"id":"'. $sender .'"
+					},
+					"message":
+					{
+						"text":"'.$Info.'"
+					}
+				}';
+			break;
 		case 'resumen_art':
 			$jsonData='{
 					"recipient":
@@ -890,6 +902,11 @@ function ReturnMessage($witEntities,$sender,$access_token)
 				$jsonData=JsonReturnSancionesReglamento($infoPuntos,$sender,$witEntities->modulo);
 				enviar($jsonData,$access_token);
 				break;
+			case 'remision_art':
+				$infoRemision=Reglamento($witEntities->articulo,null,'corralon');
+				$jsonData=JsonReturnSancionesReglamento($infoRemision,$sender,$witEntities->modulo);
+				enviar($jsonData,$access_token);
+				break;
 			default:
 				$witEntities->modulo='indefinido';
 				$jsonData=JsonReturn($AirInfo,$sender,$witEntities->modulo);
@@ -978,7 +995,7 @@ function Principal()
 				{
 					$btn_selec->articulo=$payload_div[1];
 				}
-				elseif((strcmp($payload_div[0],'multa_art')===0)||(strcmp($payload_div[0],'puntosLicencia_art')===0))
+				elseif((strcmp($payload_div[0],'multa_art')===0)||(strcmp($payload_div[0],'puntosLicencia_art')===0)||(strcmp($payload_div[0],'remision_art')===0))
 				{
 					$btn_selec->articulo=$payload_div[1];
 				}

@@ -217,7 +217,7 @@
 	      "Los ciclistas que vayan a cruzar una vía secundaria en cuya intersección la luz del semáforo se encuentre en rojo o en la que exista un señalamiento restrictivo de “Alto” o “Ceda el paso”, podrán seguir de frente siempre y cuando disminuyan su velocidad, volteen a ambos lados y se aseguren que no existen peatones o vehículos aproximándose a la intersección por la vía transversal. En caso de que existan peatones o vehículos aproximándose, o no existan las condiciones de visibilidad que les permita cerciorarse de que es seguro continuar su camino, los ciclistas deberán hacer alto total, dar el paso o verificar que no se aproxima ningún otro usuario de la vía y seguir de frente con la debida precaución. "
 	    ],
 	    "sanciones": [0,0,0,0,0],
-	    "multas": [[]],
+	    "multas": [],
 	    "arresto": []
 	  },
 
@@ -240,7 +240,7 @@
 	    "tabla": [],
 	    "text": ["Los vehículos no motorizados preferentemente deben circular por el carril derecho, excepto:","I. En calles compartidas ciclistas en las que pueden utilizar cualquier carril;","II. Se vaya a realizar un giro a la izquierda, en cuyo caso deberá llegar a la esquina próxima, posarse en el área de espera ciclstas, en donde permanecerá hasta que señalamientos viales permitan su incorporación a la izquierda; y ","III. Se requiera rebasar a otros vehículos más lentos o existan vehículos parados o estacionados, obstáculos u obras que impiden la utilización del carril. "],
 	    "sanciones": [0,0,0,0,0],
-	    "multas": [[]],
+	    "multas": [],
 	    "arresto": []
 
 	},
@@ -250,7 +250,7 @@
 	    "tabla": [],
 	    "text": ["Se prohíbe a los conductores de vehículos no motorizados:","I. Circular sobre las aceras y áreas reservadas al uso exclusivo de peatones, con excepción de los niños menores de doce años y los elementos de seguridad pública que conduzcan vehículos no motorizados, salvo que el conductor ingrese a su domicilio o a un estacionamiento, en este caso debe desmontar y caminar;","II. Circular por los carriles exclusivos para el transporte público de pasajeros; excepto cuando estos cuenten con el señalamiento horizontal y vertical que así lo indique;","III. Detenerse sobre las áreas reservadas para el tránsito de peatones;","IV. Circular por los carriles centrales o interiores de las vías de acceso controlado y donde así lo indique el señalamiento restrictivo, excepto cuando sea autorizado por la Secretaría y Seguridad Pública, quienes determinarán las condiciones y los horarios permitidos;","V. Circular entre carriles, salvo cuando el ciclista se encuentre con tránsito detenido y busque colocarse en un área de espera ciclista o en un lugar visible para reiniciar la marcha.","Los conductores de vehículos no motorizados que no cumplan con las obligaciones de este reglamento, serán amonestados verbalmente por los agentes y orientados a conducirse de conformidad con lo establecido por las disposiciones aplicables."],
 	    "sanciones": [0,0,0,0,0],
-	    "multas": [[]],
+	    "multas": [],
 	    "arresto": []
 	},
 
@@ -870,36 +870,79 @@
 	{
 		$articulo_index=$articulo-1;
 		$articulo=$jsonReglamento[$articulo_index]['num_art'];
-		$num_sanciones=count($jsonReglamento[$articulo_index]['tabla'][0]['filas']);
-		$desc_fila=$jsonReglamento[$articulo_index]['tabla'][0]['filas'][0][0];
 
 		if(strcmp($sancion,'multa')===0)
 		{
-			if($num_sanciones>0)
+			$aplica=$jsonReglamento[$articulo_index]['sanciones'][1];
+			if($aplica==1)
 			{
-				for($i=1;$i<$num_sanciones;$i++)
+				$num_sanciones=count($jsonReglamento[$articulo_index]['tabla'][0]['filas']);
+				$filas=count($jsonReglamento[$articulo_index]['tabla'][0]['filas'][0]);
+				for($i=0;$i<$num_sanciones-1;$i++)
 				{
-					$fracciones=$jsonReglamento[$articulo_index]['tabla'][0]['filas'][$i][0];
-					$multa_min=$jsonReglamento[$articulo_index]['multas'][$i-1][0];
-					$multa_max=$jsonReglamento[$articulo_index]['multas'][$i-1][1];
+					$multa_min=$jsonReglamento[$articulo_index]['multas'][$i][0];
+					$multa_max=$jsonReglamento[$articulo_index]['multas'][$i][1];
 					$multa_min=$multa_min*$unidad_cuenta;
 					$multa_max=$multa_max*$unidad_cuenta;
-					$sanciones=$sanciones.''.$desc_fila.':'.$fracciones.'\n$'.$multa_min.' a $'.$multa_max;
+
+					if($filas>2)
+					{
+						$desc_fila=$jsonReglamento[$articulo_index]['tabla'][0]['filas'][0][0];
+						$fracciones=$jsonReglamento[$articulo_index]['tabla'][0]['filas'][$i+1][0];
+						$sanciones=$sanciones.''.$desc_fila.':'.$fracciones.'\n$'.$multa_min.' a $'.$multa_max;
+					}
+					else
+					{
+						$sanciones=$sanciones.'$'.$multa_min.' a $'.$multa_max;
+					}
 				}
-				$sanciones='Multa\n Artículo '.$articulo.'\n'.$sanciones;
 			}
+			else
+			{
+				$sanciones='No aplica';
+			}
+			$sanciones='Multa\nArtículo '.$articulo.'\n'.$sanciones;
 		}
 		elseif (strcmp($sancion,'puntos_licencia')===0) {
-			if($num_sanciones>0)
+			$aplica=$jsonReglamento[$articulo_index]['sanciones'][2];
+			if($aplica==1)
 			{
-				for($i=1;$i<$num_sanciones;$i++)
+				$num_sanciones=count($jsonReglamento[$articulo_index]['tabla'][0]['filas']);
+				$filas=count($jsonReglamento[$articulo_index]['tabla'][0]['filas'][0]);
+				for($i=0;$i<$num_sanciones-1;$i++)
 				{
-					$fracciones=$jsonReglamento[$articulo_index]['tabla'][0]['filas'][$i][0];
-					$multa=$jsonReglamento[$articulo_index]['tabla'][0]['filas'][$i][2];
-					$sanciones=$sanciones.''.$desc_fila.':'.$fracciones.'\n'.$multa.'\n';
+					if($filas>2)
+					{
+						$desc_fila=$jsonReglamento[$articulo_index]['tabla'][0]['filas'][0][0];
+						$fracciones=$jsonReglamento[$articulo_index]['tabla'][0]['filas'][$i+1][0];
+						$multa=$jsonReglamento[$articulo_index]['tabla'][0]['filas'][$i+1][2];
+						$sanciones=$sanciones.''.$desc_fila.':'.$fracciones.'\n'.$multa.'\n';
+					}
+					else
+					{
+						$multa=$jsonReglamento[$articulo_index]['tabla'][0]['filas'][$i+1][1];
+						$sanciones=$sanciones.''.$multa.'\n';
+					}	
 				}
-				$sanciones='Puntos de penalización\n Artículo '.$articulo.'\n'.$sanciones;
 			}
+			else
+			{
+				$sanciones='No aplica';
+			}
+			$sanciones='Puntos de penalización\nArtículo '.$articulo.'\n'.$sanciones;
+		}
+		elseif ((strcmp($sancion,'corralon')===0)) {
+			$aplica=$jsonReglamento[$articulo_index]['sanciones'][3];
+			if($aplica==1)
+			{
+				$sanciones=$sanciones.'El vehículo pude ser remitido al depósito por medio de una unidad de remolque de la Secretaría de Seguridad Publica\n';
+					
+			}
+			else
+			{
+				$sanciones='No aplica';
+			}
+			$sanciones='Remisión del vehículo\nArtículo '.$articulo.'\n'.$sanciones;
 		}
 		return $sanciones;
 	}
