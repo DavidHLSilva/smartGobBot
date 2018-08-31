@@ -1,5 +1,6 @@
 <?php
 require_once('ReglamentoTransito/reglamento.php');
+require_once('utils/location.php');
  //clase de entidades de wit.ai
  class entitiesWit
 {
@@ -15,6 +16,8 @@ class boton_Seleccionado
 {
 	public $modulo;
 	public $articulo;
+	public $latitud;
+	public $longitud;
 }
 
 //Clase para almacenar informcación de la calidad del aire
@@ -492,12 +495,24 @@ function JsonReturnReglamento($usuario,$sender,$witEntities)
 					},
 					"message":
 					{
-						"text":"Excelente.Por ultimo envianos tu ubiación",
+						"text":"Hola que tal :) . Para comenzar, necesitamos en nos envíes tu ubicación",
 						"quick_replies":[
 					      {
 					        "content_type":"location"
 					      }
 					    ]
+					}
+				}';
+			break;
+		case 'descripcion_hechos':
+			$jsonData='{
+					"recipient":
+					{
+						"id":"'. $sender .'"
+					},
+					"message":
+					{
+						"text":"Muy bien :), ahora ingresa lo que quieres consultar del reglamento de tránsito",
 					}
 				}';
 			break;
@@ -511,7 +526,7 @@ function JsonReturnReglamento($usuario,$sender,$witEntities)
 							"type":"template",
 							"payload":{
 									"template_type":"button",
-									"text":"ok. A continuación selecciona que tipo de vehículo conduces:",
+									"text":"A continuación selecciona que tipo de vehículo conduces:",
 									"buttons":[
 											{
 												"type":"postback",
@@ -544,7 +559,7 @@ function JsonReturnReglamento($usuario,$sender,$witEntities)
 						"type":"template",
 						"payload":{
 								"template_type":"button",
-								"text":"Muy bien. Ahora selecciona que tipo de usuario eres:",
+								"text":"Excelente :) . Por último, selecciona que tipo de usuario eres:",
 								"buttons":[
 											{
 												"type":"postback",
@@ -568,16 +583,6 @@ function JsonReturnReglamento($usuario,$sender,$witEntities)
 					}';
 			break;
 		default:
-			$jsonData='{
-					"recipient":
-					{
-						"id":"'. $sender .'"
-					},
-					"message":
-					{
-						"text":"Hola que tal :), ingresa lo que quieres consultar del reglamento de tránsito",
-					}
-				}';
 			break;
 	}
 	return $jsonData;
@@ -752,14 +757,13 @@ function getInfoReglamento($jsonReglamento)
 }
 
 //Consula a la api del REGLAMENTO DE TRANSITO
-function consultaReglamento($witEntities)
+function consultaReglamento($witEntities,$sender)
 {
-	//$input=json_decode(file_get_contents('php://input'), true);
-	//$latitud=$input['entry'][0]['messaging'][0]['message']['attachments'][0]['payload']['coordinates']['lat'];
-	//$longitud$input['entry'][0]['messaging'][0]['message']['attachments'][0]['payload']['coordinates']['long'];
-
+	$ubicacion=leerUbicacion($sender);
+	$latitud=$ubicacion["latitud"];
+	$longitud=$ubicacion["longitud"];
 	$enunciado=str_replace(" ","%20",$witEntities->hechosInfraccion);
-	$url='http://148.206.32.60/ReglamentoCDMX/v1/index.php/Articulos?enunciado='.$enunciado.'&tipo_usuario='.$witEntities->usuarioInfraccion.'&latitud=19.4277394&longitud=-99.1290131';
+	$url='http://148.206.32.60/ReglamentoCDMX/v1/index.php/Articulos?enunciado='.$enunciado.'&tipo_usuario='.$witEntities->usuarioInfraccion.'&latitud='.$latitud.'&longitud='.$longitud;
 	$ch=curl_init($url);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 	$result=curl_exec($ch);
@@ -854,7 +858,7 @@ function ReturnMessage($witEntities,$sender,$access_token)
 			case '#reglamento':
 				if(isset($witEntities->usuarioInfraccion)&&isset($witEntities->hechosInfraccion)&&(strcmp($witEntities->usuarioInfraccion,'conductor_vehiculo')!==0))
 				{
-					$reglamentoInfo=consultaReglamento($witEntities);
+					$reglamentoInfo=consultaReglamento($witEntities,$sender);
 					$num_articulos=count($reglamentoInfo);
 					if($num_articulos>0)
 					{
@@ -870,8 +874,16 @@ function ReturnMessage($witEntities,$sender,$access_token)
 					enviar($jsonData,$access_token);
 				}
 				else{
-					$jsonData=JsonReturnReglamento($witEntities->usuarioInfraccion,$sender,$witEntities);
-					enviar($jsonData,$access_token);
+					if(isset($witEntities->latitud)&&isset($witEntities->longitud))
+					{
+						$jsonData=JsonReturnReglamento('descripcion_hechos',$sender,$witEntities);
+						enviar($jsonData,$access_token);
+					}
+					else
+					{
+						$jsonData=JsonReturnReglamento('ubicacion_usuario',$sender,$witEntities);
+						enviar($jsonData,$access_token);
+					}
 				}
 				break;
 			case 'leer_art':
@@ -965,6 +977,8 @@ function Principal()
 	$sender=$input['entry'][0]['messaging'][0]['sender']['id'];
 	$message=isset($input['entry'][0]['messaging'][0]['message']['text'])? $input['entry'][0]['messaging'][0]['message']['text']:'';
 	$selec_btn=$input['entry'][0]['messaging'][0]['postback']['payload'];
+	$latitud=$input['entry'][0]['messaging'][0]['message']['attachments'][0]['payload']['coordinates']['lat'];
+	$longitud=$input['entry'][0]['messaging'][0]['message']['attachments'][0]['payload']['coordinates']['long'];
 
 	if($message || $selec_btn)
 	{
@@ -1008,6 +1022,14 @@ function Principal()
 			}
 		}
 		
+	}
+	elseif ($latitud&&$longitud) {
+		$btn_selec=new boton_Seleccionado();
+		$btn_selec->modulo='#reglamento';
+		$btn_selec->latitud=$latitud;
+		$btn_selec->longitud=$longitud;
+		almacenarUbicacion($sender,$latitud,$longitud);
+		ReturnMessage($btn_selec,$sender,$access_token);
 	}
 }
 
