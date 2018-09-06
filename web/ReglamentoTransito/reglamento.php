@@ -889,11 +889,11 @@
 					{
 						$desc_fila=$jsonReglamento[$articulo_index]['tabla'][0]['filas'][0][0];
 						$fracciones=$jsonReglamento[$articulo_index]['tabla'][0]['filas'][$i+1][0];
-						$sanciones=$sanciones.''.$desc_fila.':'.$fracciones.'\n$'.$multa_min.' a $'.$multa_max.'\n';
+						$sanciones=$sanciones.''.$desc_fila.':'.$fracciones.'</br>$'.$multa_min.' a $'.$multa_max.'</br>';
 					}
 					else
 					{
-						$sanciones=$sanciones.'$'.$multa_min.' a $'.$multa_max.'\n';
+						$sanciones=$sanciones.'$'.$multa_min.' a $'.$multa_max.'</br>';
 					}
 				}
 			}
@@ -901,7 +901,7 @@
 			{
 				$sanciones='No aplica';
 			}
-			$sanciones='Multa\nArtículo '.$articulo.'\n'.$sanciones;
+			$sanciones=$sanciones;
 		}
 		elseif (strcmp($sancion,'puntos_licencia')===0) {
 			$aplica=$jsonReglamento[$articulo_index]['sanciones'][2];
@@ -916,12 +916,12 @@
 						$desc_fila=$jsonReglamento[$articulo_index]['tabla'][0]['filas'][0][0];
 						$fracciones=$jsonReglamento[$articulo_index]['tabla'][0]['filas'][$i+1][0];
 						$multa=$jsonReglamento[$articulo_index]['tabla'][0]['filas'][$i+1][2];
-						$sanciones=$sanciones.''.$desc_fila.':'.$fracciones.'\n'.$multa.'\n';
+						$sanciones=$sanciones.''.$desc_fila.':'.$fracciones.'</br>'.$multa.'</br>';
 					}
 					else
 					{
 						$multa=$jsonReglamento[$articulo_index]['tabla'][0]['filas'][$i+1][1];
-						$sanciones=$sanciones.''.$multa.'\n';
+						$sanciones=$sanciones.''.$multa.'</br>';
 					}	
 				}
 			}
@@ -929,20 +929,20 @@
 			{
 				$sanciones='No aplica';
 			}
-			$sanciones='Puntos de penalización\nArtículo '.$articulo.'\n'.$sanciones;
+			$sanciones=$sanciones;
 		}
 		elseif ((strcmp($sancion,'corralon')===0)) {
 			$aplica=$jsonReglamento[$articulo_index]['sanciones'][3];
 			if($aplica==1)
 			{
-				$sanciones=$sanciones.'El vehículo pude ser remitido al depósito por medio de una unidad de remolque de la Secretaría de Seguridad Publica\n';
+				$sanciones=$sanciones.'El vehículo pude ser remitido al depósito por medio de una unidad de remolque de la Secretaría de Seguridad Publica</br>';
 					
 			}
 			else
 			{
 				$sanciones='No aplica';
 			}
-			$sanciones='Remisión del vehículo\nArtículo '.$articulo.'\n'.$sanciones;
+			$sanciones=$sanciones;
 		}
 		return $sanciones;
 	}
@@ -954,7 +954,7 @@
 		if(strcmp($textoSelec,'resumen_art')===0)
 		{
 			$resumen=$jsonReglamento[$articulo_index]['res_art'];
-			$lectura='Resumen del articulo '.$articulo.'\n\n'.$resumen;
+			$lectura=$resumen;
 
 		}
 		elseif (strcmp($textoSelec,'art_completo')===0) {
@@ -965,7 +965,7 @@
 				$texto_art=$jsonReglamento[$articulo_index]['text'][$i];
 				$lectura=$lectura.''.$texto_art;
 			}
-			$lectura='Articulo '.$articulo.'\n\n'.$lectura;
+			$lectura=$lectura;
 		}
 		return $lectura;
 	}

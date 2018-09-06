@@ -1,6 +1,5 @@
 <?php
 require_once('ReglamentoTransito/reglamento.php');
-require_once('utils/location.php');
  //clase de entidades de wit.ai
  class entitiesWit
 {
@@ -308,14 +307,9 @@ function JsonReturn($Info,$sender,$modulo)
 									"text":"'.$mensaje.'",
 									"buttons":[
 									{
-										"type":"postback",
-										"title":"ver artículo",
-										"payload":"leer_art '.$Info->articulo.'"
-									},
-									{
-										"type":"postback",
-										"title":"sanciones",
-										"payload":"sanciones_art '.$Info->articulo.'"
+										"type":"web_url",
+										"url":"http://ancient-brushlands-87186.herokuapp.com/ReglamentoTransito/articulos.php?articulo='.$Info->articulo.'",
+										"title":"ver artículo"
 									},
 								]
 							}
@@ -323,67 +317,28 @@ function JsonReturn($Info,$sender,$modulo)
 					}
 				}';
 			break;
-		case 'leer_art':
-			$mensaje='articulo:'.$Info->articulo;
-				$jsonData='{
-					"recipient":{
+		case 'manualReglamento':
+		$jsonData='{
+						"recipient":
+						{
 							"id":"'. $sender .'"
-					},
-					"message":{
-						"attachment":{
-							"type":"template",
-							"payload":{
-									"template_type":"button",
-									"text":"'.$mensaje.'",
-									"buttons":[
-									{
-										"type":"postback",
-										"title":"resumen",
-										"payload":"resumen_art '.$Info->articulo.'"
-									},
-									{
-										"type":"postback",
-										"title":"artículo completo",
-										"payload":"completo_art '.$Info->articulo.'"
-									},
-								]
-							}
+						},
+						"message":
+						{
+							"text":"Para consultar el reglamento de tránsito debes poner #reglamento usuario descripcion por ejemplo:\n#reglamento conductor_particular me pase un alto"
 						}
-					}
 				}';
-			break;
-		case 'sanciones_art':
-			$mensaje='articulo:'.$Info->articulo;
-				$jsonData='{
-					"recipient":{
+		break;
+		case 'usuariosReglamento':
+			$jsonData='{
+						"recipient":
+						{
 							"id":"'. $sender .'"
-					},
-					"message":{
-						"attachment":{
-							"type":"template",
-							"payload":{
-									"template_type":"button",
-									"text":"'.$mensaje.'",
-									"buttons":[
-									{
-										"type":"postback",
-										"title":"multa",
-										"payload":"multa_art '.$Info->articulo.'"
-									},
-									{
-										"type":"postback",
-										"title":"puntos a la licencia",
-										"payload":"puntosLicencia_art '.$Info->articulo.'"
-									},
-									{
-										"type":"postback",
-										"title":"remisión de vehículo",
-										"payload":"remision_art '.$Info->articulo.'"
-									},
-								]
-							}
+						},
+						"message":
+						{
+							"text":"Los usuarios disponibles actualmente son:\nciclista\nmotociclista\nconductor_particular\nconductor_publico\nconductor_otro"
 						}
-					}
 				}';
 			break;
 		default:
@@ -408,181 +363,6 @@ function JsonReturn($Info,$sender,$modulo)
 						}
 					}
 				}';
-			break;
-	}
-	return $jsonData;
-}
-
-function JsonReturnSancionesReglamento($Info,$sender,$modulo)
-{
-	$jsonData;
-	switch ($modulo) {
-		case 'multa_art':
-			$jsonData='{
-					"recipient":
-					{
-						"id":"'. $sender .'"
-					},
-					"message":
-					{
-						"text":"'.$Info.'"
-					}
-				}';
-			break;
-		case 'puntosLicencia_art':
-			$jsonData='{
-					"recipient":
-					{
-						"id":"'. $sender .'"
-					},
-					"message":
-					{
-						"text":"'.$Info.'"
-					}
-				}';
-			break;
-		case 'remision_art':
-			$jsonData='{
-					"recipient":
-					{
-						"id":"'. $sender .'"
-					},
-					"message":
-					{
-						"text":"'.$Info.'"
-					}
-				}';
-			break;
-		case 'resumen_art':
-			$jsonData='{
-					"recipient":
-					{
-						"id":"'. $sender .'"
-					},
-					"message":
-					{
-						"text":"'.$Info.'"
-					}
-				}';
-			break;
-		case 'completo_art':
-			$jsonData='{
-					"recipient":
-					{
-						"id":"'. $sender .'"
-					},
-					"message":
-					{
-						"text":"'.$Info.'"
-					}
-				}';
-			break;
-		default:
-			break;
-	}
-	return $jsonData;
-
-}
-function JsonReturnReglamento($usuario,$sender,$witEntities)
-{
-	$jsonData;
-	switch ($usuario) {
-		case 'ubicacion_usuario':
-				$jsonData='{
-					"recipient":
-					{
-						"id":"'. $sender .'"
-					},
-					"message":
-					{
-						"text":"Hola que tal :) . Para comenzar, necesitamos en nos envíes tu ubicación",
-						"quick_replies":[
-					      {
-					        "content_type":"location"
-					      }
-					    ]
-					}
-				}';
-			break;
-		case 'descripcion_hechos':
-			$jsonData='{
-					"recipient":
-					{
-						"id":"'. $sender .'"
-					},
-					"message":
-					{
-						"text":"Muy bien :), ahora ingresa lo que quieres consultar del reglamento de tránsito",
-					}
-				}';
-			break;
-		case 'conductor_vehiculo':
-			$jsonData='{
-					"recipient":{
-						"id":"'. $sender .'"
-					},
-					"message":{
-						"attachment":{
-							"type":"template",
-							"payload":{
-									"template_type":"button",
-									"text":"A continuación selecciona que tipo de vehículo conduces:",
-									"buttons":[
-											{
-												"type":"postback",
-												"title":"vehículo particular",
-												"payload":"#reglamento conductor_particular '.$witEntities->hechosInfraccion.'"
-											},
-											{
-												"type":"postback",
-												"title":"vehículo publico",
-												"payload":"#reglamento conductor_publico '.$witEntities->hechosInfraccion.'"
-											},
-											{
-												"type":"postback",
-												"title":"otro tipo vehículo",
-												"payload":"#reglamento conductor_otro '.$witEntities->hechosInfraccion.'"
-											}
-									]
-								}
-							}
-						}
-					}';
-			break;
-		case 'usuarios':
-			$jsonData='{
-				"recipient":{
-					"id":"'. $sender .'"
-				},
-				"message":{
-					"attachment":{
-						"type":"template",
-						"payload":{
-								"template_type":"button",
-								"text":"Excelente :) . Por último, selecciona que tipo de usuario eres:",
-								"buttons":[
-											{
-												"type":"postback",
-												"title":"ciclista",
-												"payload":"#reglamento ciclista '.$witEntities->hechosInfraccion.'"
-											},
-											{
-												"type":"postback",
-												"title":"motociclista",
-												"payload":"#reglamento motociclista '.$witEntities->hechosInfraccion.'"
-											},
-											{
-												"type":"postback",
-												"title":"conductor vehículo",
-												"payload":"#reglamento conductor_vehiculo '.$witEntities->hechosInfraccion.'"
-											}
-									]
-								}
-							}
-						}
-					}';
-			break;
-		default:
 			break;
 	}
 	return $jsonData;
@@ -759,11 +539,8 @@ function getInfoReglamento($jsonReglamento)
 //Consula a la api del REGLAMENTO DE TRANSITO
 function consultaReglamento($witEntities,$sender)
 {
-	$ubicacion=leerUbicacion($sender);
-	$latitud=$ubicacion["latitud"];
-	$longitud=$ubicacion["longitud"];
 	$enunciado=str_replace(" ","%20",$witEntities->hechosInfraccion);
-	$url='http://148.206.32.60/ReglamentoCDMX/v1/index.php/Articulos?enunciado='.$enunciado.'&tipo_usuario='.$witEntities->usuarioInfraccion.'&latitud='.$latitud.'&longitud='.$longitud;
+	$url='http://148.206.32.60/ReglamentoCDMX/v1/index.php/Articulos?enunciado='.$enunciado.'&tipo_usuario='.$witEntities->usuarioInfraccion.'&latitud=19.4277394&longitud=-99.1290131';
 	$ch=curl_init($url);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 	$result=curl_exec($ch);
@@ -856,7 +633,7 @@ function ReturnMessage($witEntities,$sender,$access_token)
 				break;
 
 			case '#reglamento':
-				if(isset($witEntities->usuarioInfraccion)&&isset($witEntities->hechosInfraccion)&&(strcmp($witEntities->usuarioInfraccion,'conductor_vehiculo')!==0))
+				if(isset($witEntities->usuarioInfraccion)&&isset($witEntities->hechosInfraccion))
 				{
 					$reglamentoInfo=consultaReglamento($witEntities,$sender);
 					$num_articulos=count($reglamentoInfo);
@@ -869,56 +646,14 @@ function ReturnMessage($witEntities,$sender,$access_token)
 						}
 					}
 				}
-				elseif (strcmp($witEntities->usuarioInfraccion,'conductor_vehiculo')===0) {
-					$jsonData=JsonReturnReglamento($witEntities->usuarioInfraccion,$sender,$witEntities);
+				else
+				{
+					$jsonData=JsonReturn(null,$sender,'manualReglamento');
+					enviar($jsonData,$access_token);
+					$jsonData=JsonReturn(null,$sender,'usuariosReglamento');
 					enviar($jsonData,$access_token);
 				}
-				else{
-					if(isset($witEntities->latitud)&&isset($witEntities->longitud))
-					{
-						$jsonData=JsonReturnReglamento('descripcion_hechos',$sender,$witEntities);
-						enviar($jsonData,$access_token);
-					}
-					else
-					{
-						$jsonData=JsonReturnReglamento('ubicacion_usuario',$sender,$witEntities);
-						enviar($jsonData,$access_token);
-					}
-				}
-				break;
-			case 'leer_art':
-				$jsonData=JsonReturn($witEntities,$sender,$witEntities->modulo);
-				enviar($jsonData,$access_token);
-				break;
-			case 'sanciones_art':
-				$jsonData=JsonReturn($witEntities,$sender,$witEntities->modulo);
-				enviar($jsonData,$access_token);
-				break;
-			case 'resumen_art':
-				$resumenArt=Reglamento($witEntities->articulo,'resumen_art',null);
-				$jsonData=JsonReturnSancionesReglamento($resumenArt,$sender,$witEntities->modulo);
-				enviar($jsonData,$access_token);
-				break;
-			case 'completo_art':
-				$artCompleto=Reglamento($witEntities->articulo,'art_completo',null);
-				$jsonData=JsonReturnSancionesReglamento($artCompleto,$sender,$witEntities->modulo);
-				enviar($jsonData,$access_token);
-				break;
-			case 'multa_art':
-				$infoMulta=Reglamento($witEntities->articulo,null,'multa');
-				$jsonData=JsonReturnSancionesReglamento($infoMulta,$sender,$witEntities->modulo);
-				enviar($jsonData,$access_token);
-				break;
-			case 'puntosLicencia_art':
-				$infoPuntos=Reglamento($witEntities->articulo,null,'puntos_licencia');
-				$jsonData=JsonReturnSancionesReglamento($infoPuntos,$sender,$witEntities->modulo);
-				enviar($jsonData,$access_token);
-				break;
-			case 'remision_art':
-				$infoRemision=Reglamento($witEntities->articulo,null,'corralon');
-				$jsonData=JsonReturnSancionesReglamento($infoRemision,$sender,$witEntities->modulo);
-				enviar($jsonData,$access_token);
-				break;
+			break;
 			default:
 				$witEntities->modulo='indefinido';
 				$jsonData=JsonReturn($AirInfo,$sender,$witEntities->modulo);
@@ -933,10 +668,6 @@ function ReturnMessage($witEntities,$sender,$access_token)
 		{
 			$witEntities->modulo='saludo';
 			$jsonData=JsonReturn(null,$sender,$witEntities->modulo);
-			enviar($jsonData,$access_token);
-		}
-		elseif (isset($witEntities->hechosInfraccion)) {
-			$jsonData=JsonReturnReglamento('usuarios',$sender,$witEntities);
 			enviar($jsonData,$access_token);
 		}
 		else
@@ -977,8 +708,6 @@ function Principal()
 	$sender=$input['entry'][0]['messaging'][0]['sender']['id'];
 	$message=isset($input['entry'][0]['messaging'][0]['message']['text'])? $input['entry'][0]['messaging'][0]['message']['text']:'';
 	$selec_btn=$input['entry'][0]['messaging'][0]['postback']['payload'];
-	$latitud=$input['entry'][0]['messaging'][0]['message']['attachments'][0]['payload']['coordinates']['lat'];
-	$longitud=$input['entry'][0]['messaging'][0]['message']['attachments'][0]['payload']['coordinates']['long'];
 
 	if($message || $selec_btn)
 	{
@@ -1022,14 +751,6 @@ function Principal()
 			}
 		}
 		
-	}
-	elseif ($latitud&&$longitud) {
-		$btn_selec=new boton_Seleccionado();
-		$btn_selec->modulo='#reglamento';
-		$btn_selec->latitud=$latitud;
-		$btn_selec->longitud=$longitud;
-		almacenarUbicacion($sender,$latitud,$longitud);
-		ReturnMessage($btn_selec,$sender,$access_token);
 	}
 }
 
