@@ -299,29 +299,6 @@ function JsonReturn($Info,$sender,$modulo)
 		//El caso #reglsamento envia el articulo relacionado con la descripción que el usuario ingreso
 		case '#reglamento':
 				$image="http://ancient-brushlands-87186.herokuapp.com/imagenes/reglamento_bot/img_reglamento.png";
-				/*$mensaje='articulo:'.$Info->articulo.', descripción:'.$Info->descripcion;
-				$jsonData='{
-					"recipient":{
-							"id":"'. $sender .'"
-					},
-					"message":{
-						"attachment":{
-							"type":"template",
-							"payload":{
-									"template_type":"button",
-									"text":"'.$mensaje.'",
-									"buttons":[
-									{
-										"type":"web_url",
-										"url":"http://ancient-brushlands-87186.herokuapp.com/ReglamentoTransito/articulos.php?articulo='.$Info->articulo.'",
-										"title":"ver artículo"
-									},
-								]
-							}
-						}
-					}
-				}';*/
-
 				$jsonData='{
 							"recipient":{
 									"id":"'. $sender .'"
@@ -492,13 +469,13 @@ function JsonReturn($Info,$sender,$modulo)
 	$witEntities->usuarioInfraccion=handle_wit($entities,"usuarioInfraccion");
 	$witEntities->hechosInfraccion=handle_wit($entities,"hechosInfraccion");
 
-	$witEntities->hechosSAC=handle_wit($entities,"hechosSAC");
+	/*$witEntities->hechosSAC=handle_wit($entities,"hechosSAC");
 	$witEntities->correo=handle_wit($entities,"correo");
 	$witEntities->nombre=handle_wit($entities,"nombre");
 
 	if (isset($witEntities->hechosSAC)) {
 		$witEntities->modulo="#asistencia_ciudadana";
-	}
+	}*/
 
 	return $witEntities;
 }
