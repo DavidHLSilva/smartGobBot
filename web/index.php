@@ -85,7 +85,7 @@ function JsonReturn($Info,$sender,$modulo)
 							"type":"template",
 							"payload":{
 									"template_type":"button",
-									"text":"Hola :) ,es un gusto tenerte por aquí <3 , a continuación te presento los módulos actualmente disponibles, selecciona el que gustes",
+									"text":"Hola :) ,es un gusto tenerte por aquí <3 , a continuación te presento los módulo con los que contamos, selecciona el que gustes",
 									"buttons":[
 									{
 										"type":"postback",
@@ -120,7 +120,7 @@ function JsonReturn($Info,$sender,$modulo)
 							"type":"template",
 							"payload":{
 									"template_type":"button",
-									"text":"Hola que tal :) , estos son los módulos actualmente disponibles, selecciona el que gustes",
+									"text":"Hola que tal :) , estos son los módulos con los que contamos, selecciona el que gustes",
 									"buttons":[
 									{
 										"type":"postback",
@@ -154,7 +154,7 @@ function JsonReturn($Info,$sender,$modulo)
 					},
 					"message":
 					{
-						"text":" Este módulo te permite consultar información sobre la calidad del aire de alguna delegación, para ello debes poner #aire y la delegación, por ejemplo\n #aire TLAHUAC\n  ;) "
+						"text":" Este módulo te permite consultar información sobre la calidad del aire en alguna delegación, para ello debes poner #aire y la delegación, por ejemplo\n #aire TLAHUAC\n  ;) "
 					}
 			}';
 			break;
@@ -169,7 +169,7 @@ function JsonReturn($Info,$sender,$modulo)
 					},
 					"message":
 					{
-						"text":" Este módulo te permite consultar información sobre el corralon donde está tu auto, para ello sólo debes poner #corralon y la placa del auto, por ejemplo\n #corralon placa\n  ;) "
+						"text":" Este módulo te permite consultar información sobre el corralon donde está su auto, para ello debe poner #corralon y las placas del auto, por ejemplo\n #corralon placas\n  ;) "
 					}
 			}';
 			break;
@@ -184,7 +184,7 @@ function JsonReturn($Info,$sender,$modulo)
 					},
 					"message":
 					{
-						"text":" Este módulo te permite consultar información sobre el reglamento de tránsito de la CDMX. \n Para consultar el reglamento ingresa #reglamento\n  ;) "
+						"text":" Este módulo te permite consultar información sobre el reglamento de tránsito de la CDMX, para ello sólo debe poner #reglamento, por ejemplo\n #reglamento\n  ;) "
 					}
 			}';			
 			break;
@@ -298,41 +298,28 @@ function JsonReturn($Info,$sender,$modulo)
 
 		//El caso #reglsamento envia el articulo relacionado con la descripción que el usuario ingreso
 		case '#reglamento':
-				$image="http://ancient-brushlands-87186.herokuapp.com/imagenes/reglamento_bot/img_reglamento.png";
+				$mensaje='articulo:'.$Info->articulo.', descripción:'.$Info->descripcion;
 				$jsonData='{
-							"recipient":{
-									"id":"'. $sender .'"
-							},
-							"message":
-							{
-								"attachment":
-								{
-									"type":"template",
-									"payload":
+					"recipient":{
+							"id":"'. $sender .'"
+					},
+					"message":{
+						"attachment":{
+							"type":"template",
+							"payload":{
+									"template_type":"button",
+									"text":"'.$mensaje.'",
+									"buttons":[
 									{
-										"template_type":"generic",
-										"elements":[
-											{
-												"title":"'.$Info->articulo .'",
-												"image_url":"'.$image.'",
-				            					"subtitle":"'.$Info->descripcion.'",
-				            					 "default_action": {
-										              "type": "web_url",
-										              "url": "'.$payload_url.'",
-										            },
-				            					"buttons":[
-														{
-															"type":"web_url",
-															"url":"http://ancient-brushlands-87186.herokuapp.com/ReglamentoTransito/articulos.php?articulo='.$Info->articulo.'",
-															"title":"ver artículo"
-														}
-												]
-											}
-										]
-									}
-								}
+										"type":"web_url",
+										"url":"http://ancient-brushlands-87186.herokuapp.com/ReglamentoTransito/articulos.php?articulo='.$Info->articulo.'",
+										"title":"ver artículo"
+									},
+								]
 							}
-					}';
+						}
+					}
+				}';
 			break;
 		case 'manualReglamento':
 		$jsonData='{
@@ -469,13 +456,13 @@ function JsonReturn($Info,$sender,$modulo)
 	$witEntities->usuarioInfraccion=handle_wit($entities,"usuarioInfraccion");
 	$witEntities->hechosInfraccion=handle_wit($entities,"hechosInfraccion");
 
-	/*$witEntities->hechosSAC=handle_wit($entities,"hechosSAC");
+	$witEntities->hechosSAC=handle_wit($entities,"hechosSAC");
 	$witEntities->correo=handle_wit($entities,"correo");
 	$witEntities->nombre=handle_wit($entities,"nombre");
 
 	if (isset($witEntities->hechosSAC)) {
 		$witEntities->modulo="#asistencia_ciudadana";
-	}*/
+	}
 
 	return $witEntities;
 }
