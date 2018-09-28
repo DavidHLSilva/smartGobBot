@@ -963,7 +963,7 @@
 			for($i=0;$i<$parrafos_text;$i++)
 			{
 				$texto_art=$jsonReglamento[$articulo_index]['text'][$i];
-				$lectura=$lectura.''.$texto_art;
+				$lectura=$lectura.''.$texto_art.'</br>';
 			}
 			$lectura=$lectura;
 		}

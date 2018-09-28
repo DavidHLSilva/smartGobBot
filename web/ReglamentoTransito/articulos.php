@@ -1,20 +1,68 @@
-<?php
-	require_once('reglamento.php');
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Reglamento CDMX</title>
+	<link rel="stylesheet" type="text/css" href="css/estilos.css">
+</head>
+<body>
+	<header>
+		<img src="imagenes/ico_reglamento.png">
+		<h1 class="titulo"> REGLAMENTO CDMX</h1>
+	</header>
 
-	$articulo= $_GET["articulo"];
-	$multa=Reglamento($articulo,null,'multa');
-	$punto_licencia=Reglamento($articulo,null,'puntos_licencia');
-	$corralon=Reglamento($articulo,null,'corralon');
-	$artLect=Reglamento($articulo,'art_completo',null);
-	$resumen=Reglamento($articulo,'resumen_art',null);
-	echo '<h1>Articulo '.$articulo.'</h1>';
-	echo '<p>'.$resumen.'</p>';
-	echo "<h2>Multa</h2>";
-	echo '<p>'.$multa.'</p>';
-	echo "<h2>Remision del vehiculo</h2>";
-	echo '<p>'.$corralon.'</p>';
-	echo "<h2>Puntos de penalizacion a la licencia</h2>";
-	echo '<p>'.$punto_licencia.'</p>';
-	echo '<h2>Articulo '.$articulo.'</h2>';
-	echo '<p>'.$artLect.'</p>';
-?>
+	<section>
+
+		<?php
+			require_once('reglamento.php');
+
+			$articulo= $_GET["articulo"];
+			$resumen=Reglamento($articulo,'resumen_art',null);
+
+			echo '<h2>Artículo '.$articulo.'</h2>';
+			echo '<p>'.$resumen.'</p>';
+		?>
+
+		<img src="imagenes/ico_multa.png">
+		<h3>Multa</h3>
+		<div>
+			<?php
+				require_once('reglamento.php');
+				$multa=Reglamento($articulo,null,'multa');
+				echo '<p>'.$multa.'</p>';
+			?>
+		</div>
+
+		<img src="imagenes/ico_corralon.png">
+		<h3>Remisión del vehículo</h3>
+		<div>
+			<?php
+				require_once('reglamento.php');
+				$corralon=Reglamento($articulo,null,'corralon');
+				echo '<p>'.$corralon.'</p>';
+			?>
+		</div>
+
+		<img src="imagenes/ico_puntos.png">
+		<h3>Puntos de penalización a la licencia</h3>
+		<div>
+			<?php
+				require_once('reglamento.php');
+				$punto_licencia=Reglamento($articulo,null,'puntos_licencia');
+				echo '<p>'.$punto_licencia.'</p>';
+			?>
+		</div>
+
+		<h3 id="art_completo">Articulo Completo</h3>
+		<div>
+			<?php
+				require_once('reglamento.php');
+				$artLect=Reglamento($articulo,'art_completo',null);
+				echo '<p>'.$artLect.'</p>';
+			?>
+		</div>
+
+	</section>
+
+</body>
+</html>

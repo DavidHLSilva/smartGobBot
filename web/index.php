@@ -1,5 +1,6 @@
 <?php
 require_once('ReglamentoTransito/reglamento.php');
+require_once('SAC/formularioSac.php');
  //clase de entidades de wit.ai
  class entitiesWit
 {
@@ -9,6 +10,9 @@ require_once('ReglamentoTransito/reglamento.php');
 	public $saludo;
 	public $hechosInfraccion;
 	public $usuarioInfraccion;
+	public $hechosSAC;
+	public $correo;
+	public $nombre;
 }
 
 class boton_Seleccionado
@@ -41,7 +45,7 @@ class infoCorralon
 	public $coordy;
 }
 
-//clase para almacenar informacion sobre el corralon
+//clase para almacenar informacion sobre el Reglamento de transito
 class infoReglamento
 {
 	public $articulo;
@@ -81,7 +85,7 @@ function JsonReturn($Info,$sender,$modulo)
 							"type":"template",
 							"payload":{
 									"template_type":"button",
-									"text":"Hola :) ,es un gusto tenerte por aquí <3 , a continuación te presento los módulo con los que contamos, selecciona el que gustes",
+									"text":"Hola :) ,es un gusto tenerte por aquí <3 , a continuación te presento los módulos actualmente disponibles, selecciona el que gustes",
 									"buttons":[
 									{
 										"type":"postback",
@@ -116,7 +120,7 @@ function JsonReturn($Info,$sender,$modulo)
 							"type":"template",
 							"payload":{
 									"template_type":"button",
-									"text":"Hola que tal :) , estos son los módulos con los que contamos, selecciona el que gustes",
+									"text":"Hola que tal :) , estos son los módulos actualmente disponibles, selecciona el que gustes",
 									"buttons":[
 									{
 										"type":"postback",
@@ -150,7 +154,7 @@ function JsonReturn($Info,$sender,$modulo)
 					},
 					"message":
 					{
-						"text":" Este módulo te permite consultar información sobre la calidad del aire en alguna delegación, para ello debes poner #aire y la delegación, por ejemplo\n #aire TLAHUAC\n  ;) "
+						"text":" Este módulo te permite consultar información sobre la calidad del aire de alguna delegación, para ello debes poner #aire y la delegación, por ejemplo\n #aire TLAHUAC\n  ;) "
 					}
 			}';
 			break;
@@ -165,7 +169,7 @@ function JsonReturn($Info,$sender,$modulo)
 					},
 					"message":
 					{
-						"text":" Este módulo te permite consultar información sobre el corralon donde está su auto, para ello debe poner #corralon y las placas del auto, por ejemplo\n #corralon placas\n  ;) "
+						"text":" Este módulo te permite consultar información sobre el corralon donde está tu auto, para ello sólo debes poner #corralon y la placa del auto, por ejemplo\n #corralon placa\n  ;) "
 					}
 			}';
 			break;
@@ -180,12 +184,12 @@ function JsonReturn($Info,$sender,$modulo)
 					},
 					"message":
 					{
-						"text":" Este módulo te permite consultar información sobre el reglamento de tránsito de la CDMX, para ello sólo debe poner #reglamento, por ejemplo\n #reglamento\n  ;) "
+						"text":" Este módulo te permite consultar información sobre el reglamento de tránsito de la CDMX. \n Para consultar el reglamento ingresa #reglamento\n  ;) "
 					}
 			}';			
 			break;
 
-		//El caso #aire muestra información hacerca del módulo de la calidad del aire
+		//El caso #aire muestra la información de respuesta que el usuario a solicitado al modulo de calidad del aire
 		case '#aire':
 			if(is_null($Info))
 			{
@@ -232,7 +236,7 @@ function JsonReturn($Info,$sender,$modulo)
 			}
 			break;
 
-		//El caso #aire muestra información hacerca del módulo del corralon
+		//El caso #corralon muestra la información de respuesta que el usuario a solicitado al modulo de corralon
 		case '#corralon':
 			if(is_null($Info))
 			{
@@ -292,9 +296,10 @@ function JsonReturn($Info,$sender,$modulo)
 				}
 			break;
 
-		//El caso #aire muestra información hacerca del módulo del reglemento de tránsito
+		//El caso #reglsamento envia el articulo relacionado con la descripción que el usuario ingreso
 		case '#reglamento':
-				$mensaje='articulo:'.$Info->articulo.', descripción:'.$Info->descripcion;
+				$image="http://ancient-brushlands-87186.herokuapp.com/imagenes/reglamento_bot/img_reglamento.png";
+				/*$mensaje='articulo:'.$Info->articulo.', descripción:'.$Info->descripcion;
 				$jsonData='{
 					"recipient":{
 							"id":"'. $sender .'"
@@ -315,7 +320,42 @@ function JsonReturn($Info,$sender,$modulo)
 							}
 						}
 					}
-				}';
+				}';*/
+
+				$jsonData='{
+							"recipient":{
+									"id":"'. $sender .'"
+							},
+							"message":
+							{
+								"attachment":
+								{
+									"type":"template",
+									"payload":
+									{
+										"template_type":"generic",
+										"elements":[
+											{
+												"title":"'.$Info->articulo .'",
+												"image_url":"'.$image.'",
+				            					"subtitle":"'.$Info->descripcion.'",
+				            					 "default_action": {
+										              "type": "web_url",
+										              "url": "'.$payload_url.'",
+										            },
+				            					"buttons":[
+														{
+															"type":"web_url",
+															"url":"http://ancient-brushlands-87186.herokuapp.com/ReglamentoTransito/articulos.php?articulo='.$Info->articulo.'",
+															"title":"ver artículo"
+														}
+												]
+											}
+										]
+									}
+								}
+							}
+					}';
 			break;
 		case 'manualReglamento':
 		$jsonData='{
@@ -338,6 +378,18 @@ function JsonReturn($Info,$sender,$modulo)
 						"message":
 						{
 							"text":"Los usuarios disponibles actualmente son:\nciclista\nmotociclista\nconductor_particular\nconductor_publico\nconductor_otro"
+						}
+				}';
+			break;
+		case '#asistencia_ciudadana':
+			$jsonData='{
+						"recipient":
+						{
+							"id":"'. $sender .'"
+						},
+						"message":
+						{
+							"text":"Bienvenido al modulo de asistencia ciudadana, por favor ingresa una breve descripción de los hechos"
 						}
 				}';
 			break;
@@ -368,6 +420,33 @@ function JsonReturn($Info,$sender,$modulo)
 	return $jsonData;
 }
  
+
+
+ function formularioSAC($sender,$selec)
+ {
+ 	$jsonData;
+ 	switch ($selec) {
+ 		case 'pedirNombre':
+
+ 			$jsonData='{
+						"recipient":
+						{
+							"id":"'. $sender .'"
+						},
+						"message":
+						{
+							"text":"Ok, para darle seguimiento a tu denuncia, por favor ingresa una cuenta de correo electrónico"
+						}
+				}';
+ 			break;
+ 		
+ 		default:
+ 			# code...
+ 			break;
+ 	}
+
+ 	return $jsonData;
+ }
 
 //*****************************************************************************************************
 //MANEJO DE LA RESPUESTA DE WIT.AI
@@ -412,6 +491,14 @@ function JsonReturn($Info,$sender,$modulo)
 	$witEntities->saludo=handle_wit($entities,"saludo");
 	$witEntities->usuarioInfraccion=handle_wit($entities,"usuarioInfraccion");
 	$witEntities->hechosInfraccion=handle_wit($entities,"hechosInfraccion");
+
+	$witEntities->hechosSAC=handle_wit($entities,"hechosSAC");
+	$witEntities->correo=handle_wit($entities,"correo");
+	$witEntities->nombre=handle_wit($entities,"nombre");
+
+	if (isset($witEntities->hechosSAC)) {
+		$witEntities->modulo="#asistencia_ciudadana";
+	}
 
 	return $witEntities;
 }
@@ -654,6 +741,20 @@ function ReturnMessage($witEntities,$sender,$access_token)
 					enviar($jsonData,$access_token);
 				}
 			break;
+			case '#asistencia_ciudadana':
+					$info=consultarDenuncia($sender);
+					if (isset($witEntities->hechosSAC)) 
+					{
+						almacenaDenuncia($sender,$witEntities->hechosSAC,"correo","nombre");
+						$jsonData=formularioSAC($sender,'pedirNombre');
+						enviar($jsonData,$access_token);
+					}
+					else
+					{
+						$jsonData=JsonReturn(null,$sender,$witEntities->modulo);
+						enviar($jsonData,$access_token);
+					}
+				break;
 			default:
 				$witEntities->modulo='indefinido';
 				$jsonData=JsonReturn($AirInfo,$sender,$witEntities->modulo);
@@ -714,13 +815,16 @@ function Principal()
 		$response_wit;
 		if($message)
 		{
+			//si el usuario envió un mensaje sutituimos los espacios en blanco por su respectivo código %20
 			$message=str_replace(" ","%20",$message);
+			//si el usuario envió un mensaje sutituimos los # por su respectivo código %23
 			$message=str_replace("#","%23",$message);
 			$response_wit=wit_response($message);
 			ReturnMessage($response_wit,$sender,$access_token);
 		}
 		elseif ($selec_btn) {
-			if(strpos($selec_btn,"#")===0)
+			//si el usuario presionó un botón entramos en está sección
+			/*if(strpos($selec_btn,"#")===0)
 			{
 				$selec_btn=str_replace(" ","%20",$selec_btn);
 				$selec_btn=str_replace("#","%23",$selec_btn);
@@ -728,13 +832,13 @@ function Principal()
 				ReturnMessage($response_wit,$sender,$access_token);
 			}
 			else
-			{
+			{*/
 				$btn_selec=new boton_Seleccionado();
 				$payload_div=explode(" ",$selec_btn);
 				$sub_strings=count($payload_div);
 				$btn_selec->modulo=$payload_div[0];
 
-				if((strcmp($payload_div[0],'leer_art')===0)||(strcmp($payload_div[0],'sanciones_art')===0))
+				/*if((strcmp($payload_div[0],'leer_art')===0)||(strcmp($payload_div[0],'sanciones_art')===0))
 				{
 					$btn_selec->articulo=$payload_div[1];
 				}
@@ -745,10 +849,10 @@ function Principal()
 				elseif((strcmp($payload_div[0],'resumen_art')===0)||(strcmp($payload_div[0],'completo_art')===0))
 				{
 					$btn_selec->articulo=$payload_div[1];
-				}
+				}*/
 
 				ReturnMessage($btn_selec,$sender,$access_token);
-			}
+			//}
 		}
 		
 	}

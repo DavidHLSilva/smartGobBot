@@ -41,7 +41,7 @@ class infoCorralon
 	public $coordy;
 }
 
-//clase para almacenar informacion sobre el corralon
+//clase para almacenar informacion sobre el reglamento de transito
 class infoReglamento
 {
 	public $articulo;
@@ -232,7 +232,7 @@ function JsonReturn($Info,$sender,$modulo)
 			}
 			break;
 
-		//El caso #aire muestra información hacerca del módulo del corralon
+		//El caso #corralon muestra información hacerca del módulo del corralon
 		case '#corralon':
 			if(is_null($Info))
 			{
@@ -292,7 +292,7 @@ function JsonReturn($Info,$sender,$modulo)
 				}
 			break;
 
-		//El caso #aire muestra información hacerca del módulo del reglemento de tránsito
+		//El caso #reglamento muestra información hacerca del módulo del reglemento de tránsito
 		case '#reglamento':
 				$mensaje='articulo:'.$Info->articulo.', descripción:'.$Info->descripcion;
 				$jsonData='{
@@ -401,7 +401,9 @@ function JsonReturn($Info,$sender,$modulo)
 	curl_close($ch);
 		
 	$result_json=json_decode($result,true);
+
 	$entities=$result_json['entities'];
+
 	$witEntities->modulo=handle_wit($entities,"modulo");
 	if(isset($witEntities->modulo))
 	{
@@ -421,7 +423,7 @@ function JsonReturn($Info,$sender,$modulo)
 //OBTENER INFORMACION SOBRE LA CALIDAD DEL AIRE
 //*****************************************************************************************************
 
-//Funsion para obtner la informacion de la calidad del aire de la delegacion solicitada
+//Funsion para obtner la informacion del Json de Respuesta de la api de la calidad del aire de la delegacion solicitada
 function getInfoAir($jsonAire,$lugar)
 {
 	$AirInfo= new infoAir();
@@ -479,7 +481,7 @@ function ConsultaCalidadAire($lugar)
 //OBTENER INFORMACION SOBRE EL CORRALON
 //*****************************************************************************************************
 
-//funcion para obtener información sobre el corralon
+//funcion para obtener información del Json de respuesta de la api de CORRALONES sobre el útimo corralon en donde estuvo el auto
 function getInfoCorralon($jsonCorralon)
 {
 	$info=new infoCorralon();
@@ -705,36 +707,47 @@ function Principal()
 	}
 	
 	$input=json_decode(file_get_contents('php://input'), true);
+
+	//obtenemos el id de usuario quien mandó el mensaje
 	$sender=$input['entry'][0]['messaging'][0]['sender']['id'];
+
+	//obtenemos el menseje de texto que envio el usuario
 	$message=isset($input['entry'][0]['messaging'][0]['message']['text'])? $input['entry'][0]['messaging'][0]['message']['text']:'';
+
+	//obtenemos el mensaje de regreso si es que el usuario presionó alguno de los botones
 	$selec_btn=$input['entry'][0]['messaging'][0]['postback']['payload'];
 
+	//comprobamos si el usuario envio un mensaje o presionó algún botón del chatbot
 	if($message || $selec_btn)
 	{
 		$response_wit;
 		if($message)
 		{
+			//si el usuario envió un mensaje sutituimos los espacios en blanco por su respectivo código %20
 			$message=str_replace(" ","%20",$message);
+			//si el usuario envió un mensaje sutituimos los # por su respectivo código %23
 			$message=str_replace("#","%23",$message);
+
 			$response_wit=wit_response($message);
 			ReturnMessage($response_wit,$sender,$access_token);
 		}
 		elseif ($selec_btn) {
-			if(strpos($selec_btn,"#")===0)
-			{
+			//si el usuario presionó un botón entramos en está sección
+			/*if(strpos($selec_btn,"#")===0)
+			{ 
 				$selec_btn=str_replace(" ","%20",$selec_btn);
 				$selec_btn=str_replace("#","%23",$selec_btn);
 				$response_wit=wit_response($selec_btn);
 				ReturnMessage($response_wit,$sender,$access_token);
 			}
 			else
-			{
+			{*/
 				$btn_selec=new boton_Seleccionado();
 				$payload_div=explode(" ",$selec_btn);
 				$sub_strings=count($payload_div);
 				$btn_selec->modulo=$payload_div[0];
 
-				if((strcmp($payload_div[0],'leer_art')===0)||(strcmp($payload_div[0],'sanciones_art')===0))
+				/*if((strcmp($payload_div[0],'leer_art')===0)||(strcmp($payload_div[0],'sanciones_art')===0))
 				{
 					$btn_selec->articulo=$payload_div[1];
 				}
@@ -745,10 +758,10 @@ function Principal()
 				elseif((strcmp($payload_div[0],'resumen_art')===0)||(strcmp($payload_div[0],'completo_art')===0))
 				{
 					$btn_selec->articulo=$payload_div[1];
-				}
+				}*/
 
 				ReturnMessage($btn_selec,$sender,$access_token);
-			}
+			//}
 		}
 		
 	}
