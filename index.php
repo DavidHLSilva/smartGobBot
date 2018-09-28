@@ -1,5 +1,6 @@
 <?php
 require_once('ReglamentoTransito/reglamento.php');
+require_once('SAC/formularioSac.php');
  //clase de entidades de wit.ai
  class entitiesWit
 {
@@ -9,6 +10,9 @@ require_once('ReglamentoTransito/reglamento.php');
 	public $saludo;
 	public $hechosInfraccion;
 	public $usuarioInfraccion;
+	public $hechosSAC;
+	public $correo;
+	public $nombre;
 }
 
 class boton_Seleccionado
@@ -41,7 +45,7 @@ class infoCorralon
 	public $coordy;
 }
 
-//clase para almacenar informacion sobre el reglamento de transito
+//clase para almacenar informacion sobre el Reglamento de transito
 class infoReglamento
 {
 	public $articulo;
@@ -185,7 +189,7 @@ function JsonReturn($Info,$sender,$modulo)
 			}';			
 			break;
 
-		//El caso #aire muestra información hacerca del módulo de la calidad del aire
+		//El caso #aire muestra la información de respuesta que el usuario a solicitado al modulo de calidad del aire
 		case '#aire':
 			if(is_null($Info))
 			{
@@ -232,7 +236,7 @@ function JsonReturn($Info,$sender,$modulo)
 			}
 			break;
 
-		//El caso #corralon muestra información hacerca del módulo del corralon
+		//El caso #corralon muestra la información de respuesta que el usuario a solicitado al modulo de corralon
 		case '#corralon':
 			if(is_null($Info))
 			{
@@ -292,7 +296,7 @@ function JsonReturn($Info,$sender,$modulo)
 				}
 			break;
 
-		//El caso #reglamento muestra información hacerca del módulo del reglemento de tránsito
+		//El caso #reglsamento envia el articulo relacionado con la descripción que el usuario ingreso
 		case '#reglamento':
 				$mensaje='articulo:'.$Info->articulo.', descripción:'.$Info->descripcion;
 				$jsonData='{
@@ -308,7 +312,7 @@ function JsonReturn($Info,$sender,$modulo)
 									"buttons":[
 									{
 										"type":"web_url",
-										"url":"https://014ce2f1.ngrok.io/SmartCDMX/web/ReglamentoTransito/articulos.php?articulo='.$Info->articulo.'",
+										"url":"http://ancient-brushlands-87186.herokuapp.com/ReglamentoTransito/articulos.php?articulo='.$Info->articulo.'",
 										"title":"ver artículo"
 									},
 								]
@@ -341,6 +345,18 @@ function JsonReturn($Info,$sender,$modulo)
 						}
 				}';
 			break;
+		case '#asistencia_ciudadana':
+			$jsonData='{
+						"recipient":
+						{
+							"id":"'. $sender .'"
+						},
+						"message":
+						{
+							"text":"Bienvenido al modulo de asistencia ciudadana, por favor ingresa una breve descripción de los hechos"
+						}
+				}';
+			break;
 		default:
 			$jsonData='{
 					"recipient":{
@@ -368,6 +384,33 @@ function JsonReturn($Info,$sender,$modulo)
 	return $jsonData;
 }
  
+
+
+ function formularioSAC($sender,$selec)
+ {
+ 	$jsonData;
+ 	switch ($selec) {
+ 		case 'pedirNombre':
+
+ 			$jsonData='{
+						"recipient":
+						{
+							"id":"'. $sender .'"
+						},
+						"message":
+						{
+							"text":"Ok, para darle seguimiento a tu denuncia, por favor ingresa una cuenta de correo electrónico"
+						}
+				}';
+ 			break;
+ 		
+ 		default:
+ 			# code...
+ 			break;
+ 	}
+
+ 	return $jsonData;
+ }
 
 //*****************************************************************************************************
 //MANEJO DE LA RESPUESTA DE WIT.AI
@@ -401,9 +444,7 @@ function JsonReturn($Info,$sender,$modulo)
 	curl_close($ch);
 		
 	$result_json=json_decode($result,true);
-
 	$entities=$result_json['entities'];
-
 	$witEntities->modulo=handle_wit($entities,"modulo");
 	if(isset($witEntities->modulo))
 	{
@@ -415,6 +456,14 @@ function JsonReturn($Info,$sender,$modulo)
 	$witEntities->usuarioInfraccion=handle_wit($entities,"usuarioInfraccion");
 	$witEntities->hechosInfraccion=handle_wit($entities,"hechosInfraccion");
 
+	$witEntities->hechosSAC=handle_wit($entities,"hechosSAC");
+	$witEntities->correo=handle_wit($entities,"correo");
+	$witEntities->nombre=handle_wit($entities,"nombre");
+
+	if (isset($witEntities->hechosSAC)) {
+		$witEntities->modulo="#asistencia_ciudadana";
+	}
+
 	return $witEntities;
 }
 
@@ -423,7 +472,7 @@ function JsonReturn($Info,$sender,$modulo)
 //OBTENER INFORMACION SOBRE LA CALIDAD DEL AIRE
 //*****************************************************************************************************
 
-//Funsion para obtner la informacion del Json de Respuesta de la api de la calidad del aire de la delegacion solicitada
+//Funsion para obtner la informacion de la calidad del aire de la delegacion solicitada
 function getInfoAir($jsonAire,$lugar)
 {
 	$AirInfo= new infoAir();
@@ -481,7 +530,7 @@ function ConsultaCalidadAire($lugar)
 //OBTENER INFORMACION SOBRE EL CORRALON
 //*****************************************************************************************************
 
-//funcion para obtener información del Json de respuesta de la api de CORRALONES sobre el útimo corralon en donde estuvo el auto
+//funcion para obtener información sobre el corralon
 function getInfoCorralon($jsonCorralon)
 {
 	$info=new infoCorralon();
@@ -656,6 +705,20 @@ function ReturnMessage($witEntities,$sender,$access_token)
 					enviar($jsonData,$access_token);
 				}
 			break;
+			case '#asistencia_ciudadana':
+					$info=consultarDenuncia($sender);
+					if (isset($witEntities->hechosSAC)) 
+					{
+						almacenaDenuncia($sender,$witEntities->hechosSAC,"correo","nombre");
+						$jsonData=formularioSAC($sender,'pedirNombre');
+						enviar($jsonData,$access_token);
+					}
+					else
+					{
+						$jsonData=JsonReturn(null,$sender,$witEntities->modulo);
+						enviar($jsonData,$access_token);
+					}
+				break;
 			default:
 				$witEntities->modulo='indefinido';
 				$jsonData=JsonReturn($AirInfo,$sender,$witEntities->modulo);
@@ -707,17 +770,10 @@ function Principal()
 	}
 	
 	$input=json_decode(file_get_contents('php://input'), true);
-
-	//obtenemos el id de usuario quien mandó el mensaje
 	$sender=$input['entry'][0]['messaging'][0]['sender']['id'];
-
-	//obtenemos el menseje de texto que envio el usuario
 	$message=isset($input['entry'][0]['messaging'][0]['message']['text'])? $input['entry'][0]['messaging'][0]['message']['text']:'';
-
-	//obtenemos el mensaje de regreso si es que el usuario presionó alguno de los botones
 	$selec_btn=$input['entry'][0]['messaging'][0]['postback']['payload'];
 
-	//comprobamos si el usuario envio un mensaje o presionó algún botón del chatbot
 	if($message || $selec_btn)
 	{
 		$response_wit;
@@ -727,14 +783,13 @@ function Principal()
 			$message=str_replace(" ","%20",$message);
 			//si el usuario envió un mensaje sutituimos los # por su respectivo código %23
 			$message=str_replace("#","%23",$message);
-
 			$response_wit=wit_response($message);
 			ReturnMessage($response_wit,$sender,$access_token);
 		}
 		elseif ($selec_btn) {
 			//si el usuario presionó un botón entramos en está sección
 			/*if(strpos($selec_btn,"#")===0)
-			{ 
+			{
 				$selec_btn=str_replace(" ","%20",$selec_btn);
 				$selec_btn=str_replace("#","%23",$selec_btn);
 				$response_wit=wit_response($selec_btn);
