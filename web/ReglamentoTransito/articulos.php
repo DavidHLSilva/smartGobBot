@@ -7,7 +7,7 @@
 </head>
 <body>
 	<header>
-		<img src="imagenes/ico_reglamento.png">
+		<img src="http://ancient-brushlands-87186.herokuapp.com/ReglamentoTransito/imagenes/ico_reglamento.png">
 		<h1 class="titulo"> REGLAMENTO CDMX</h1>
 	</header>
 
@@ -23,7 +23,7 @@
 			echo '<p>'.$resumen.'</p>';
 		?>
 
-		<img src="imagenes/ico_multa.png">
+		<img src="http://ancient-brushlands-87186.herokuapp.com/ReglamentoTransito/imagenes/ico_multa.png">
 		<h3>Multa</h3>
 		<div>
 			<?php
@@ -33,7 +33,7 @@
 			?>
 		</div>
 
-		<img src="imagenes/ico_corralon.png">
+		<img src="http://ancient-brushlands-87186.herokuapp.com/ReglamentoTransito/imagenes/ico_corralon.png">
 		<h3>Remisión del vehículo</h3>
 		<div>
 			<?php
@@ -43,7 +43,7 @@
 			?>
 		</div>
 
-		<img src="imagenes/ico_puntos.png">
+		<img src="http://ancient-brushlands-87186.herokuapp.com/ReglamentoTransito/imagenes/ico_puntos.png">
 		<h3>Puntos de penalización a la licencia</h3>
 		<div>
 			<?php
