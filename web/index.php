@@ -462,6 +462,7 @@ function JsonReturn($Info,$sender,$modulo)
 				}';
  			break;
  		case 'enviarFormulario':
+ 			consultarDenuncia($sender);
  			$jsonData='{
 						"recipient":
 						{
