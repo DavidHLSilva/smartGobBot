@@ -143,6 +143,29 @@ function JsonReturn($Info,$sender,$modulo)
 					}
 				}';
 			break;
+		case 'menuCompleto':
+			$jsonData='{
+					"recipient":{
+							"id":"'. $sender .'"
+					},
+					"message":{
+						"attachment":{
+							"type":"template",
+							"payload":{
+									"template_type":"button",
+									"text":".",
+									"buttons":[
+									{
+										"type":"postback",
+										"title":"#atencionCiudadana",
+										"payload":"btn_atencionCiudadana"
+									},
+								]
+							}
+						}
+					}
+				}';
+			break;
 
 		//El caso BTN_AIRE muestra información sobre el modo de uso  del módulo de la calidad del aire
 		//Este caso es accionado cuando el bonton #aire del menú o del mensaje de saludo es seleccionado
@@ -187,6 +210,19 @@ function JsonReturn($Info,$sender,$modulo)
 						"text":" Éste módulo te permite consultar información sobre el reglamento de tránsito de la CDMX. \n Para consultar el reglamento debes poner #reglamento \n  ;) "
 					}
 			}';			
+			break;
+
+		case 'btn_atencionCiudadana':
+			$jsonData='{
+					"recipient":
+					{
+						"id":"'. $sender .'"
+					},
+					"message":
+					{
+						"text":" Éste módulo te permite realizar una denuncia ante el SAC, para ello debe de ingresar #atencionCiudadana y una descripcion de los hehcos. Por ejemplo \n #atencionCiudadana descripción "
+					}
+			}';		
 			break;
 
 		//El caso #aire muestra la información de respuesta que el usuario a solicitado al modulo de calidad del aire
@@ -354,7 +390,7 @@ function JsonReturn($Info,$sender,$modulo)
 						}
 				}';
 			break;
-		case '#asistencia_ciudadana':
+		case '#atencionCiudadana':
 			$jsonData='{
 						"recipient":
 						{
@@ -362,7 +398,7 @@ function JsonReturn($Info,$sender,$modulo)
 						},
 						"message":
 						{
-							"text":"Bienvenido al modulo de asistencia ciudadana, por favor ingresa una breve descripción de los hechos"
+							"text":"Bienvenido al modulo de atención ciudadana, por favor ingresa una breve descripción de los hechos"
 						}
 				}';
 			break;
@@ -399,7 +435,7 @@ function JsonReturn($Info,$sender,$modulo)
  {
  	$jsonData;
  	switch ($selec) {
- 		case 'pedirNombre':
+ 		case 'pedirCorreo':
 
  			$jsonData='{
 						"recipient":
@@ -409,6 +445,31 @@ function JsonReturn($Info,$sender,$modulo)
 						"message":
 						{
 							"text":"Ok, para darle seguimiento a tu denuncia, por favor ingresa una cuenta de correo electrónico"
+						}
+				}';
+ 			break;
+
+ 		case 'pedirNombre':
+ 			$jsonData='{
+						"recipient":
+						{
+							"id":"'. $sender .'"
+						},
+						"message":
+						{
+							"text":"Para finalizar por favor, ingrese su nombre o algún alias"
+						}
+				}';
+ 			break;
+ 		case 'enviarFormulario':
+ 			$jsonData='{
+						"recipient":
+						{
+							"id":"'. $sender .'"
+						},
+						"message":
+						{
+							"text":"Su denuncia se ha enviado con exito"
 						}
 				}';
  			break;
@@ -466,11 +527,22 @@ function JsonReturn($Info,$sender,$modulo)
 	$witEntities->hechosInfraccion=handle_wit($entities,"hechosInfraccion");
 
 	$witEntities->hechosSAC=handle_wit($entities,"hechosSAC");
-	$witEntities->correo=handle_wit($entities,"correo");
-	$witEntities->nombre=handle_wit($entities,"nombre");
+	$witEntities->correo=handle_wit($entities,"email");
+	$witEntities->nombre=handle_wit($entities,"contact");
 
-	if (isset($witEntities->hechosSAC)) {
-		$witEntities->modulo="#asistencia_ciudadana";
+	if (isset($witEntities->hechosSAC) && (strcmp($witEntities->modulo, "#atencionCiudadana")===0)) {
+		$witEntities->modulo="#atencionCiudadana";
+		$witEntities->hechosSAC=$result_json["_text"];
+	}
+	elseif (strcmp($witEntities->modulo, "#atencionCiudadana")===0) {
+		$witEntities->modulo="btn_atencionCiudadana";
+	}
+	elseif (isset($witEntities->correo)) {
+		$witEntities->correo=str_replace("%40","@",$witEntities->correo);
+		$witEntities->modulo="#atencionCiudadana";
+	}
+	elseif (isset($witEntities->nombre)) {
+		$witEntities->modulo="#atencionCiudadana";
 	}
 
 	return $witEntities;
@@ -641,6 +713,8 @@ function ReturnMessage($witEntities,$sender,$access_token)
 			case 'menu':
 				$jsonData=JsonReturn(null,$sender,$witEntities->modulo);
 				enviar($jsonData,$access_token);
+				$jsonData=JsonReturn(null,$sender,"menuCompleto");
+				enviar($jsonData,$access_token);
 				break;
 
 			//Botones seleccionados del menú, muestran información y la forma de realizar las consultas en el chatbot para cada módulo	
@@ -656,7 +730,10 @@ function ReturnMessage($witEntities,$sender,$access_token)
 				$jsonData=JsonReturn(null,$sender,$witEntities->modulo);
 				enviar($jsonData,$access_token);
 				break;
-
+			case 'btn_atencionCiudadana':
+				$jsonData=JsonReturn(null,$sender,$witEntities->modulo);
+				enviar($jsonData,$access_token);
+				break;
 			//Módulos de la aplicación de SMARTCDMX	
 			case '#aire':
 				if(isset($witEntities->lugar))
@@ -714,13 +791,34 @@ function ReturnMessage($witEntities,$sender,$access_token)
 					enviar($jsonData,$access_token);
 				}
 			break;
-			case '#asistencia_ciudadana':
-					$info=consultarDenuncia($sender);
+			case '#atencionCiudadana':
+					//$info=consultarDenuncia($sender);
 					if (isset($witEntities->hechosSAC)) 
 					{
 						almacenaDenuncia($sender,$witEntities->hechosSAC,"correo","nombre");
+						$jsonData=formularioSAC($sender,'pedirCorreo');
+						enviar($jsonData,$access_token);
+					}
+					elseif (isset($witEntities->correo)) {
+						$info=consultarDenuncia($sender);
+						almacenaDenuncia($sender,$info["descripcion"],$witEntities->correo,"nombre");
 						$jsonData=formularioSAC($sender,'pedirNombre');
 						enviar($jsonData,$access_token);
+					}
+					elseif (isset($witEntities->nombre)) {
+						$info=consultarDenuncia($sender);
+
+						if((strcmp($info["descripcion"], "")!==0)&&(strcmp($info["correo"], "")!==0) )
+						{
+							almacenaDenuncia($sender,$info["descripcion"],$info["correo"],$witEntities->nombre);
+							$jsonData=formularioSAC($sender,'enviarFormulario');
+							enviar($jsonData,$access_token);
+						}
+						else
+						{
+							$jsonData=JsonReturn(null,$sender,"indefinido");
+							enviar($jsonData,$access_token);
+						}
 					}
 					else
 					{
@@ -743,6 +841,8 @@ function ReturnMessage($witEntities,$sender,$access_token)
 			$witEntities->modulo='saludo';
 			$jsonData=JsonReturn(null,$sender,$witEntities->modulo);
 			enviar($jsonData,$access_token);
+			$jsonData=JsonReturn(null,$sender,"menuCompleto");
+			enviar($jsonData,$access_token);
 		}
 		else
 		{
@@ -761,7 +861,7 @@ function ReturnMessage($witEntities,$sender,$access_token)
 
 function Principal()
 {
-	$access_token="EAADlwZCSgxfgBABOsJziaTfkBEYfafyV40NwRGys3WmQrcUpQ3l9zZCpgUIEo2NRTZAUMgFZCaqoRJmFhXk9ZAlSW4ScfoRJN4FsjCj8soICtId1usisrZBa9LO9u1JiU7vi88RmEpjwgaFJpZA1CKZB5QJ5kQpwEJ0QRBNRm2Y2M76EeV0325qu";
+	$access_token="EAADlwZCSgxfgBAHFLGYkNhS5HXb29xUvZCEFWhCgZBhl5ScoONzv5dcjOdBzfiEQzDMJgyanZAF6hOHxZChXSZBNYVA9V1lmQ5qE6rzSPgdbYZAqnyjyF3kf7R6O9z6SjSouln2ACQ1UGCGzEgJht956IpMuxHzZCJ6SnE9VzMf7OB4iu1DnfShZB";
 
 	$verify_token="SmartCDMX";
 	$hub_verify_token=null;
@@ -788,10 +888,13 @@ function Principal()
 		$response_wit;
 		if($message)
 		{
-			//si el usuario envió un mensaje sutituimos los espacios en blanco por su respectivo código %20
+			//si el usuario envió un mensaje sutituimos los espacios en blanco por su respectivo código url %20
 			$message=str_replace(" ","%20",$message);
-			//si el usuario envió un mensaje sutituimos los # por su respectivo código %23
+			//si el usuario envió un mensaje sutituimos los # por su respectivo código url %23
 			$message=str_replace("#","%23",$message);
+			//si el usuario envió un mensaje sutituimos los @ por su respectivo código url %40
+			// puedes consultar los codigos url en https://es.wikipedia.org/wiki/C%C3%B3digo_porciento
+			$message=str_replace("@","%40",$message);
 			$response_wit=wit_response($message);
 			ReturnMessage($response_wit,$sender,$access_token);
 		}

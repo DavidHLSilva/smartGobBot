@@ -11,7 +11,7 @@ function almacenaDenuncia($sender,$descripcion,$correo,$nombre)
 	if($elementos>0)
 	{
 		$denunciaSac=',"'.$sender.'":{
-				"modulo":"sac",
+				"modulo":"#asistencia_ciudadana",
 				"descripcion":"'.$descripcion.'",
 				"correo":"'.$correo.'",
 				"nombre":"'.$nombre.'"
@@ -20,7 +20,7 @@ function almacenaDenuncia($sender,$descripcion,$correo,$nombre)
 	else
 	{
 		$denunciaSac='"'.$sender.'":{
-				"modulo":"sac",
+				"modulo":"#asistencia_ciudadana",
 				"descripcion":"'.$descripcion.'",
 				"correo":"'.$correo.'",
 				"nombre":"'.$nombre.'"
