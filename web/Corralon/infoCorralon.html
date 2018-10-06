@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="https://openlayers.org/en/v4.0.1/css/ol.css" type="text/css">
+		<link rel="stylesheet" type="text/css" href="css/estilos.css">
+	</head>
+<body>
+	<header>
+		<h1>Información del depósito vehicular</h1>
+	</header>
+
+	<section>
+		<script src="https://openlayers.org/en/v4.0.1/build/ol.js"></script>
+		<script type="text/javascript" src="js/controladorCorralon.js"></script>
+		<h2 id="corralon"></h2>
+		<script>
+			getCorralon();
+		</script>
+  
+		<h3>Dirección: </h3>
+		<p id="direccion"></p>
+		<script>
+			getDireccion();
+		</script>
+
+		<p id="NumCorralon"></p>
+		<script>
+			getNumCorralon();
+		</script>
+  
+		<h3>Contacto</h3>
+		<p id="telefono"></p>
+		<script>
+			getTelefono();
+		</script>
+  
+		<h3>Mapa</h3>	
+  
+ 		<div id="map" class="map"></div>
+		
+
+		<script>
+			mapa();
+		</script>
+
+	</section>
+
+</body>
+</html>

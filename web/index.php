@@ -39,6 +39,7 @@ class infoCorralon
 {
 	public $nombre;
 	public $direccion;
+	public $numCorralon;
 	public $numero;
 	public $CP;
 	public $coordx;
@@ -289,45 +290,28 @@ function JsonReturn($Info,$sender,$modulo)
 			}
 			else
 			{
-				$title=$Info->nombre.' '.$Info->CP.'\nContacto: '.$Info->numero;
-				$subtitle=$Info->direccion;
-				$image='https://maps.googleapis.com/maps/api/staticmap?center='.$Info->coordx.','.$Info->coordy.'&markers=color:red%7Clabel:C%7C'.$Info->coordx.','.$Info->coordy.'&zoom=15&size=200x100';
-				$payload_url='https://www.openstreetmap.org/#map=18/'.$Info->coordx.'/'.$Info->coordy;
-				$numero='+5255'.$Info->numero;
 
-				$jsonData='{
-							"recipient":{
-									"id":"'. $sender .'"
-							},
-							"message":
-							{
-								"attachment":
-								{
-									"type":"template",
-									"payload":
-									{
-										"template_type":"generic",
-										"elements":[
-											{
-												"title":"'.$title .'",
-												"image_url":"'.$image.'",
-				            					"subtitle":"'.$subtitle.'",
-				            					 "default_action": {
-										              "type": "web_url",
-										              "url": "'.$payload_url.'",
-										            },
-				            					"buttons":[
-														{
-															"type":"phone_number",
-															"title":"llamar a Corralon",
-															"payload":"'.$numero.'"
-														}
-												]
-											}
-										]
-									}
+					$Info->direccion=str_replace(" ", "%20", $Info->direccion);
+					$jsonData='{
+						"recipient":{
+								"id":"'. $sender .'"
+						},
+						"message":{
+							"attachment":{
+								"type":"template",
+								"payload":{
+										"template_type":"button",
+										"text":":) La información que solicitaste es la siguiente, espero haber sido de gran ayuda (y)",
+										"buttons":[
+										{
+											"type":"web_url",
+											"url":"http://ancient-brushlands-87186.herokuapp.com/Corralon/infoCorralon.html?corralon='.$Info->nombre.'&direccion='.$Info->direccion.'&NumCorralon='.$Info->numCorralon.'&telefono='.$Info->numero.'&lat='.$Info->coordx.'&long='.$Info->coordy.'",
+											"title":"ver corralon"
+										},
+									]
 								}
 							}
+						}
 					}';
 				}
 			break;
@@ -457,7 +441,7 @@ function JsonReturn($Info,$sender,$modulo)
 						},
 						"message":
 						{
-							"text":"Para finalizar por favor, ingrese su nombre o algún alias"
+							"text":"Para finalizar por favor, ingresa tu nombre o algún alias"
 						}
 				}';
  			break;
@@ -470,7 +454,7 @@ function JsonReturn($Info,$sender,$modulo)
 						},
 						"message":
 						{
-							"text":"Su denuncia se ha enviado con exito"
+							"text":"Tu denuncia se ha enviado con exito"
 						}
 				}';
  			break;
@@ -622,6 +606,7 @@ function getInfoCorralon($jsonCorralon)
 	{
 		$info->nombre=$jsonCorralon[$ultimoCorralon]["nombre"];
 		$info->direccion=$jsonCorralon[$ultimoCorralon]["direccion"];
+		$info->numCorralon=$jsonCorralon[$ultimoCorralon]["No_Corralon"];
 		$info->numero=$jsonCorralon[$ultimoCorralon]["telefono"];
 		$info->coordy=$jsonCorralon[$ultimoCorralon]["coordy"];
 		$info->coordx=$jsonCorralon[$ultimoCorralon]["coordx"];
@@ -761,11 +746,11 @@ function ReturnMessage($witEntities,$sender,$access_token)
 
 			case '#corralon':
 				$corralonInfo=consultaCorralon($witEntities->placas);
-				if(isset($corralonInfo))
+				/*if(isset($corralonInfo))
 				{
 					$jsonData=JsonReturn(null,$sender,'mensaje');
 					enviar($jsonData,$access_token);
-				}
+				}*/
 				$jsonData=JsonReturn($corralonInfo,$sender,$witEntities->modulo);
 				enviar($jsonData,$access_token);
 				break;
