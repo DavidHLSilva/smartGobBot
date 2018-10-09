@@ -65,7 +65,7 @@
 	</section>
 
 	<footer>
-		<img src="imagenes/footer_Smartweb.png">
+		<img src="http://ancient-brushlands-87186.herokuapp.com/Corralon/imagenes/footer_Smartweb.png">
 	</footer>
 
 </body>

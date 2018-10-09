@@ -78,6 +78,19 @@ function JsonReturn($Info,$sender,$modulo,$access_token)
 		//El caso SALUDO envia un saludo de respuesta y botones con los módulos disponibles en el chatbot
 		case 'saludo':
 			$jsonData='{
+					"recipient":
+					{
+						"id":"'. $sender .'"
+					},
+					"message":
+					{
+						"text":" Hola :) ,es un gusto tenerte por aquí <3 , a continuación te presento los módulos actualmente disponibles, selecciona el que gustes "
+					}
+			}';
+			enviar($jsonData,$access_token);
+
+
+			$jsonData='{
 					"recipient":{
 							"id":"'. $sender .'"
 					},
@@ -86,22 +99,78 @@ function JsonReturn($Info,$sender,$modulo,$access_token)
 							"type":"template",
 							"payload":{
 									"template_type":"button",
-									"text":"Hola :) ,es un gusto tenerte por aquí <3 , a continuación te presento los módulos actualmente disponibles, selecciona el que gustes",
+									"text":"Módulo de la calidad del aire",
 									"buttons":[
 									{
 										"type":"postback",
 										"title":"#aire",
 										"payload":"btn_aire"
 									},
+								]
+							}
+						}
+					}
+				}';
+			enviar($jsonData,$access_token);
+			$jsonData='{
+					"recipient":{
+							"id":"'. $sender .'"
+					},
+					"message":{
+						"attachment":{
+							"type":"template",
+							"payload":{
+									"template_type":"button",
+									"text":"Módulo de Corralon",
+									"buttons":[
 									{
 										"type":"postback",
 										"title":"#corralon",
 										"payload":"btn_corralon"
 									},
+								]
+							}
+						}
+					}
+				}';
+			enviar($jsonData,$access_token);
+			$jsonData='{
+					"recipient":{
+							"id":"'. $sender .'"
+					},
+					"message":{
+						"attachment":{
+							"type":"template",
+							"payload":{
+									"template_type":"button",
+									"text":"Módulo del Reglamento de Tránsito",
+									"buttons":[
 									{
 										"type":"postback",
 										"title":"#reglamento",
 										"payload":"btn_reglamento"
+									},
+								]
+							}
+						}
+					}
+				}';
+			enviar($jsonData,$access_token);
+			$jsonData='{
+					"recipient":{
+							"id":"'. $sender .'"
+					},
+					"message":{
+						"attachment":{
+							"type":"template",
+							"payload":{
+									"template_type":"button",
+									"text":"Módulo de atención ciudadana",
+									"buttons":[
+									{
+										"type":"postback",
+										"title":"#atencionCiudadana",
+										"payload":"btn_atencionCiudadana"
 									},
 								]
 							}
@@ -211,7 +280,6 @@ function JsonReturn($Info,$sender,$modulo,$access_token)
 						}
 					}
 				}';
-			enviar($jsonData,$access_token);
 			break;
 
 		//El caso BTN_AIRE muestra información sobre el modo de uso  del módulo de la calidad del aire
