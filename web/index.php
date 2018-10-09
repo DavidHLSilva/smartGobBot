@@ -939,8 +939,6 @@ function ReturnMessage($witEntities,$sender,$access_token)
 			$witEntities->modulo='saludo';
 			$jsonData=JsonReturn(null,$sender,$witEntities->modulo,$access_token);
 			enviar($jsonData,$access_token);
-			$jsonData=JsonReturn(null,$sender,"menuCompleto",$access_token);
-			enviar($jsonData,$access_token);
 		}
 		else
 		{
