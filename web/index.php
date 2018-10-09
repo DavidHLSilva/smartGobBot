@@ -57,7 +57,7 @@ class infoReglamento
 //*****************************************************************************************************
 
 /*Seleccion del fomato Json de respuesta a enviar*/
-function JsonReturn($Info,$sender,$modulo)
+function JsonReturn($Info,$sender,$modulo,$access_token)
 {
 	$jsonData;
 	switch ($modulo) {
@@ -113,6 +113,18 @@ function JsonReturn($Info,$sender,$modulo)
 		//El caso MENU muestra los módulos disponibles en el chatbot 
 		case 'menu':
 			$jsonData='{
+					"recipient":
+					{
+						"id":"'. $sender .'"
+					},
+					"message":
+					{
+						"text":" Hola :) , estos son los módulos que actualmente están disponibles, selecciona el que gustes "
+					}
+			}';
+			enviar($jsonData,$access_token);
+
+			$jsonData='{
 					"recipient":{
 							"id":"'. $sender .'"
 					},
@@ -121,18 +133,52 @@ function JsonReturn($Info,$sender,$modulo)
 							"type":"template",
 							"payload":{
 									"template_type":"button",
-									"text":"Hola :) , estos son los módulos que actualmente están disponibles, selecciona el que gustes",
+									"text":"Módulo de la calidad del aire",
 									"buttons":[
 									{
 										"type":"postback",
 										"title":"#aire",
 										"payload":"btn_aire"
 									},
+								]
+							}
+						}
+					}
+				}';
+			enviar($jsonData,$access_token);
+			$jsonData='{
+					"recipient":{
+							"id":"'. $sender .'"
+					},
+					"message":{
+						"attachment":{
+							"type":"template",
+							"payload":{
+									"template_type":"button",
+									"text":"Módulo de Corralon",
+									"buttons":[
 									{
 										"type":"postback",
 										"title":"#corralon",
 										"payload":"btn_corralon"
 									},
+								]
+							}
+						}
+					}
+				}';
+			enviar($jsonData,$access_token);
+			$jsonData='{
+					"recipient":{
+							"id":"'. $sender .'"
+					},
+					"message":{
+						"attachment":{
+							"type":"template",
+							"payload":{
+									"template_type":"button",
+									"text":"Módulo del Reglamento de Tránsito",
+									"buttons":[
 									{
 										"type":"postback",
 										"title":"#reglamento",
@@ -143,8 +189,7 @@ function JsonReturn($Info,$sender,$modulo)
 						}
 					}
 				}';
-			break;
-		case 'menuCompleto':
+			enviar($jsonData,$access_token);
 			$jsonData='{
 					"recipient":{
 							"id":"'. $sender .'"
@@ -154,7 +199,7 @@ function JsonReturn($Info,$sender,$modulo)
 							"type":"template",
 							"payload":{
 									"template_type":"button",
-									"text":".",
+									"text":"Módulo de atención ciudadana",
 									"buttons":[
 									{
 										"type":"postback",
@@ -166,6 +211,7 @@ function JsonReturn($Info,$sender,$modulo)
 						}
 					}
 				}';
+			enviar($jsonData,$access_token);
 			break;
 
 		//El caso BTN_AIRE muestra información sobre el modo de uso  del módulo de la calidad del aire
@@ -697,27 +743,25 @@ function ReturnMessage($witEntities,$sender,$access_token)
 	{
 		switch ($witEntities->modulo) {
 			case 'menu':
-				$jsonData=JsonReturn(null,$sender,$witEntities->modulo);
-				enviar($jsonData,$access_token);
-				$jsonData=JsonReturn(null,$sender,"menuCompleto");
+				$jsonData=JsonReturn(null,$sender,$witEntities->modulo,$access_token);
 				enviar($jsonData,$access_token);
 				break;
 
 			//Botones seleccionados del menú, muestran información y la forma de realizar las consultas en el chatbot para cada módulo	
 			case 'btn_aire':
-				$jsonData=JsonReturn(null,$sender,$witEntities->modulo);
+				$jsonData=JsonReturn(null,$sender,$witEntities->modulo,$access_token);
 				enviar($jsonData,$access_token);
 				break;
 			case 'btn_corralon':
-				$jsonData=JsonReturn(null,$sender,$witEntities->modulo);
+				$jsonData=JsonReturn(null,$sender,$witEntities->modulo,$access_token);
 				enviar($jsonData,$access_token);
 				break;
 			case 'btn_reglamento':
-				$jsonData=JsonReturn(null,$sender,$witEntities->modulo);
+				$jsonData=JsonReturn(null,$sender,$witEntities->modulo,$access_token);
 				enviar($jsonData,$access_token);
 				break;
 			case 'btn_atencionCiudadana':
-				$jsonData=JsonReturn(null,$sender,$witEntities->modulo);
+				$jsonData=JsonReturn(null,$sender,$witEntities->modulo,$access_token);
 				enviar($jsonData,$access_token);
 				break;
 			//Módulos de la aplicación de SMARTCDMX	
@@ -727,19 +771,19 @@ function ReturnMessage($witEntities,$sender,$access_token)
 					$AirInfo=ConsultaCalidadAire($witEntities->lugar);	
 					if(isset($AirInfo))
 					{
-						$jsonData=JsonReturn(null,$sender,'mensaje');
+						$jsonData=JsonReturn(null,$sender,'mensaje',$access_token);
 						enviar($jsonData,$access_token);
 					}
-					$jsonData=JsonReturn($AirInfo,$sender,$witEntities->modulo);
+					$jsonData=JsonReturn($AirInfo,$sender,$witEntities->modulo,$access_token);
 					enviar($jsonData,$access_token);
 				}
 				else
 				{
 					$witEntities->lugar="CDMX";
 					$AirInfo=ConsultaCalidadAire($witEntities->lugar);
-					$jsonData=JsonReturn(null,$sender,'mensaje');
+					$jsonData=JsonReturn(null,$sender,'mensaje',$access_token);
 					enviar($jsonData,$access_token);	
-					$jsonData=JsonReturn($AirInfo,$sender,$witEntities->modulo);
+					$jsonData=JsonReturn($AirInfo,$sender,$witEntities->modulo,$access_token);
 					enviar($jsonData,$access_token);
 				}
 				break;
@@ -751,7 +795,7 @@ function ReturnMessage($witEntities,$sender,$access_token)
 					$jsonData=JsonReturn(null,$sender,'mensaje');
 					enviar($jsonData,$access_token);
 				}*/
-				$jsonData=JsonReturn($corralonInfo,$sender,$witEntities->modulo);
+				$jsonData=JsonReturn($corralonInfo,$sender,$witEntities->modulo,$access_token);
 				enviar($jsonData,$access_token);
 				break;
 
@@ -764,16 +808,16 @@ function ReturnMessage($witEntities,$sender,$access_token)
 					{
 						for($i=0;$i<$num_articulos;$i++)
 						{
-							$jsonData=JsonReturn($reglamentoInfo[$i],$sender,$witEntities->modulo);
+							$jsonData=JsonReturn($reglamentoInfo[$i],$sender,$witEntities->modulo,$access_token);
 							enviar($jsonData,$access_token);
 						}
 					}
 				}
 				else
 				{
-					$jsonData=JsonReturn(null,$sender,'manualReglamento');
+					$jsonData=JsonReturn(null,$sender,'manualReglamento',$access_token);
 					enviar($jsonData,$access_token);
-					$jsonData=JsonReturn(null,$sender,'usuariosReglamento');
+					$jsonData=JsonReturn(null,$sender,'usuariosReglamento',$access_token);
 					enviar($jsonData,$access_token);
 				}
 			break;
@@ -782,13 +826,13 @@ function ReturnMessage($witEntities,$sender,$access_token)
 					if (isset($witEntities->hechosSAC)) 
 					{
 						almacenaDenuncia($sender,$witEntities->hechosSAC,"correo","nombre");
-						$jsonData=formularioSAC($sender,'pedirCorreo');
+						$jsonData=formularioSAC($sender,'pedirCorreo',$access_token);
 						enviar($jsonData,$access_token);
 					}
 					elseif (isset($witEntities->correo)) {
 						$info=consultarDenuncia($sender);
 						almacenaDenuncia($sender,$info["descripcion"],$witEntities->correo,"nombre");
-						$jsonData=formularioSAC($sender,'pedirNombre');
+						$jsonData=formularioSAC($sender,'pedirNombre',$access_token);
 						enviar($jsonData,$access_token);
 					}
 					elseif (isset($witEntities->nombre)) {
@@ -797,24 +841,24 @@ function ReturnMessage($witEntities,$sender,$access_token)
 						if((strcmp($info["descripcion"], "")!==0)&&(strcmp($info["correo"], "")!==0) )
 						{
 							almacenaDenuncia($sender,$info["descripcion"],$info["correo"],$witEntities->nombre);
-							$jsonData=formularioSAC($sender,'enviarFormulario');
+							$jsonData=formularioSAC($sender,'enviarFormulario',$access_token);
 							enviar($jsonData,$access_token);
 						}
 						else
 						{
-							$jsonData=JsonReturn(null,$sender,"indefinido");
+							$jsonData=JsonReturn(null,$sender,"indefinido",$access_token);
 							enviar($jsonData,$access_token);
 						}
 					}
 					else
 					{
-						$jsonData=JsonReturn(null,$sender,$witEntities->modulo);
+						$jsonData=JsonReturn(null,$sender,$witEntities->modulo,$access_token);
 						enviar($jsonData,$access_token);
 					}
 				break;
 			default:
 				$witEntities->modulo='indefinido';
-				$jsonData=JsonReturn($AirInfo,$sender,$witEntities->modulo);
+				$jsonData=JsonReturn($AirInfo,$sender,$witEntities->modulo,$access_token);
 				enviar($jsonData,$access_token);
 				break;
 		}
@@ -825,15 +869,15 @@ function ReturnMessage($witEntities,$sender,$access_token)
 		if(isset($witEntities->saludo))
 		{
 			$witEntities->modulo='saludo';
-			$jsonData=JsonReturn(null,$sender,$witEntities->modulo);
+			$jsonData=JsonReturn(null,$sender,$witEntities->modulo,$access_token);
 			enviar($jsonData,$access_token);
-			$jsonData=JsonReturn(null,$sender,"menuCompleto");
+			$jsonData=JsonReturn(null,$sender,"menuCompleto",$access_token);
 			enviar($jsonData,$access_token);
 		}
 		else
 		{
 			$witEntities->modulo='indefinido';
-			$jsonData=JsonReturn(null,$sender,$witEntities->modulo);
+			$jsonData=JsonReturn(null,$sender,$witEntities->modulo,$access_token);
 			enviar($jsonData,$access_token);
 		}
 	}

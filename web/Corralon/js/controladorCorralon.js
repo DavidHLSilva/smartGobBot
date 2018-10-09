@@ -74,9 +74,9 @@ function getTelefono()
 	var telefono=getParametros("telefono");
         if(NumCorralon)
         {
-		document.getElementById("telefono").textContent="Teléfono: "+telefono;
+		document.getElementById("telefono").textContent=telefono;
         }else{
-            document.getElementById("NumCorralon").textContent="Teléfono:---";
+            document.getElementById("telefono").textContent=".---";
         }
 
 }

@@ -6,44 +6,51 @@
 	</head>
 <body>
 	<header>
-		<h1>Información del depósito vehicular</h1>
+		<img src="http://ancient-brushlands-87186.herokuapp.com/Corralon/imagenes/ico_corralon.png">
+		<h1>Corralon</h1>
 	</header>
 
 	<section>
 		<script src="https://openlayers.org/en/v4.0.1/build/ol.js"></script>
 		<script type="text/javascript" src="js/controladorCorralon.js"></script>
-		<h2 id="corralon"></h2>
-		<script>
-			getCorralon();
-		</script>
-  
-		<h3>Dirección: </h3>
-		<p id="direccion"></p>
-		<script>
-			getDireccion();
-		</script>
 
-		<p id="NumCorralon"></p>
-		<script>
-			getNumCorralon();
-		</script>
-  
-		<h3>Contacto</h3>
-		<p id="telefono"></p>
-		<script>
-			getTelefono();
-		</script>
-  
-		<h3>Mapa</h3>	
-  
- 		<div id="map" class="map"></div>
-		
+		<div id="infoContainer">
+			<h2>Información del depósito vehicular</h2>
+			<h3 id="corralon"></h3>
+			<script>
+				getCorralon();
+			</script>
 
+			<img src="http://ancient-brushlands-87186.herokuapp.com/Corralon/imagenes/ico_direccion.png">
+			<h4 id="titulo_dir" >Dirección: </h4>
+			<p id="direccion"></p>
+			<script>
+				getDireccion()
+			</script>
+
+			<p id="NumCorralon"></p>
+			<script>
+				getNumCorralon();
+			</script>
+	  
+	  		<img src="http://ancient-brushlands-87186.herokuapp.com/Corralon/imagenes/ico_telefono.png">
+			<h4 id="titulo_tel">Telefono:</h4>
+			<p id="telefono"></p>
+			<script>
+				getTelefono();
+			</script>	
+		</div>
+
+		<div id="map" class="map"></div>
 		<script>
 			mapa();
 		</script>
 
 	</section>
+
+	<footer>
+		<img src="imagenes/footer_Smartweb.png">
+	</footer>
 
 </body>
 </html>
