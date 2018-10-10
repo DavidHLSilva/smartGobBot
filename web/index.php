@@ -84,7 +84,7 @@ function JsonReturn($Info,$sender,$modulo,$access_token)
 					},
 					"message":
 					{
-						"text":" Hola :) ,es un gusto tenerte por aquí <3 , a continuación te presento los módulos actualmente disponibles, selecciona el que gustes "
+						"text":" SmartCDMX \"La ciudad en la palma de tu mano\", por éste medio tendrás acceso a las siguientes funcionalidades de nuestra app: "
 					}
 			}';
 			enviar($jsonData,$access_token);
@@ -307,7 +307,7 @@ function JsonReturn($Info,$sender,$modulo,$access_token)
 					},
 					"message":
 					{
-						"text":" Éste módulo te permite consultar información sobre el corralón donde está tu auto, para ello debes poner #corralon y la placa del auto, por ejemplo\n #corralon placa\n  ;) "
+						"text":" Éste módulo te permite consultar información sobre el corralón donde está tu auto, para ello debes poner #corralon y la placa del auto, por ejemplo\n #corralon 123ZBC\n  ;) "
 					}
 			}';
 			break;
@@ -335,7 +335,7 @@ function JsonReturn($Info,$sender,$modulo,$access_token)
 					},
 					"message":
 					{
-						"text":" Éste módulo te permite realizar una denuncia ante el SAC, para ello debe de ingresar #atencionCiudadana y una descripcion de los hehcos. Por ejemplo \n #atencionCiudadana descripción "
+						"text":" Éste módulo te permite realizar demandas de servicios, quejas, denuncias, solicitudes de información, comentarios o sugerencias sobre uno o más asuntos que le competan, para ello debes de ingresar #atencionCiudadana y una descripcion de su solicitud. Por ejemplo \n #atencionCiudadana no hay agua en Iztapalapa desde hace tres días "
 					}
 			}';		
 			break;
@@ -357,6 +357,20 @@ function JsonReturn($Info,$sender,$modulo,$access_token)
 			}
 			else
 			{
+				if(strcmp($Info->name, "CDMX")===0)
+				{
+					$jsonData='{
+							"recipient":
+							{
+								"id":"'. $sender .'"
+							},
+							"message":
+							{
+								"text":" :) La información que solicitaste es la siguiente, espero haber sido de gran ayuda (y) , también puedes consultar la calidad del aire en alguna alcaldía, ejemplo: #aire Iztapalapa "
+							}
+					}';
+					enviar($jsonData,$access_token);
+				}
 				$image="http://ancient-brushlands-87186.herokuapp.com/imagenes/Climas_bot/".$Info->image;
 
 				$title=$Info->name." ".$Info->temperatura."°C";
@@ -510,7 +524,7 @@ function JsonReturn($Info,$sender,$modulo,$access_token)
 							"type":"template",
 							"payload":{
 									"template_type":"button",
-									"text":"Esa opción no está disponible :( , pero te puedo ofrecer que veas nuestro menu",
+									"text":" SmartCDMX \"La ciudad en la palma de tu mano\", te muestro el menú de modelos disponibles ",
 									"buttons":[
 									{
 										"type":"postback",
@@ -849,8 +863,8 @@ function ReturnMessage($witEntities,$sender,$access_token)
 				{
 					$witEntities->lugar="CDMX";
 					$AirInfo=ConsultaCalidadAire($witEntities->lugar);
-					$jsonData=JsonReturn(null,$sender,'mensaje',$access_token);
-					enviar($jsonData,$access_token);	
+					//$jsonData=JsonReturn(null,$sender,'mensaje',$access_token);
+					//enviar($jsonData,$access_token);	
 					$jsonData=JsonReturn($AirInfo,$sender,$witEntities->modulo,$access_token);
 					enviar($jsonData,$access_token);
 				}
@@ -957,7 +971,7 @@ function ReturnMessage($witEntities,$sender,$access_token)
 
 function Principal()
 {
-	$access_token="EAADlwZCSgxfgBADLFTC9W1SRknxd4ClFnqyTxh1jaMkqu9IjZAsV0LyccWN2W167m5hKmDl8mhVHAfOmXT8rEsGdmeqSBSmnT4bJTyLSZA5VgDzlwJIkFFbQ3bQBwUMI9kAj0uWgyd9gqaQtwCmYwZAFrYk8RurGjuJRxVl1pPOl97UxZAcXv";
+	$access_token="EAADlwZCSgxfgBAH8RYVcvWayahMjtVnMCtrXtNygol5eFGcwHaTbIaqUmMi34YcZCtQU4iz6mZCjePKphlPib987wJCFLxDs5CsU5YNJ6nVtvOJITrnY0q04MFnrhkNKvRqvKUXrCIsSjK5HPNpecHYusDRSojV9oJdqyOfaaidaK5cbYpG";
 
 	$verify_token="SmartCDMX";
 	$hub_verify_token=null;

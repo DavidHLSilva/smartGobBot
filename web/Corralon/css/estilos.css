@@ -6,7 +6,7 @@
 
 header{
 	width:100%;
-	background: url('http://ancient-brushlands-87186.herokuapp.com/ReglamentoTransito/imagenes/header.png');
+	background: url('http://ancient-brushlands-87186.herokuapp.com/ReglamentoTransito/imagenes/header.svg');
 }
 
 header h1{
@@ -98,14 +98,19 @@ section #infoContainer p{
 	margin-left: 7%;
 	margin-right: 4%;
 }
-
-#map {
-        width: 50%;
-        height: 40%;
+#contenedorMap{
+	width: 50%;
+    height: 50%;
 	margin-right:5%;
 	margin-top: 5%;
 	float: right;
 }
+#mapdiv {
+        width: 95%;
+        height: 95%;
+        border-style: solid;
+    	border-color: black;
+    }
 
 
 footer{
