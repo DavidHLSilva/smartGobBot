@@ -8,13 +8,14 @@ header{
 	background: url('imagenes/header.svg');
 }
 
-header h1{
+header #titulo_mod {
 	color: white;
 	display: inline-block;
 	left: 1%;
 	vertical-align: middle;
 	font-weight: 5vw;
 	font-size: 5vh;
+	margin-top: 10%;
 }
 
 header img{

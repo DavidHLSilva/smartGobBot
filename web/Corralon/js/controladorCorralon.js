@@ -13,8 +13,8 @@ function mapa()
 
 	 if(lat && long)
         {
-		lat=parseFloat(lat);
-		long=parseFloat(long);
+		lat=parseFloat(lat)+0.0002;
+		long=parseFloat(long)-0.0002;
         }else{
 		lat=19.4327133;
 		long=-99.133854;

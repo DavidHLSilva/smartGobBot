@@ -8,7 +8,7 @@
 <body>
 	<header>
 		<img src="imagenes/ico_reglamento.svg">
-		<h1 class="titulo"> REGLAMENTO CDMX</h1>
+		<h1 id="titulo_mod"> Reglamento CDMX</h1>
 	</header>
 
 	<section>
