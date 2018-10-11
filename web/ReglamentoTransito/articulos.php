@@ -64,7 +64,7 @@
 
 	</section>
 	<footer>
-		<img src="imagenes/footer_Smartweb.svg">
+		<img src="imagenes/footer_Smartweb.png">
 	</footer>
 
 </body>
