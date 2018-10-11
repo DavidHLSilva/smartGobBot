@@ -543,8 +543,18 @@ function JsonReturn($Info,$sender,$modulo,$access_token)
  
 function enviarForm($descripcion,$nombre,$correo)
 {
+	$descripcion=str_replace(" ","%20",$descripcion);
+	$nombre=str_replace(" ","%20",$nombre);
+	$correo=str_replace("%40","@",$correo);
 	$url="http://www.atencionciudadana.cdmx.gob.mx/api_ssac/index.php/ssac/index";
-	$form='id_cat_edad_solicitante=1&id_cat_delegacion_solicitante=1&id_colonia_solicitante=0&nombre_solicitante=Prueba&ape_paterno_solicitante=&ape_materno_solicitante=&es_mujer=2&email_solicitante=Prueba&codigo_postal_solicitante=00000&descripcion_solicitud=Prueba&municipio_solicitante=&fecha_solicitud=2018-10-10&hora_solicitud=18:31:15&dentro_df_solicitud=0&id_cat_delegacion_solicitud=1&id_colonia_solicitud=0&calle_solicitud=&num_ext_solicitud=&num_int_solicitud=&geo_latitud_solicitud=19.4327133&geo_longitud_solicitud=-99.133854&estatus=1&codigo_postal_solicitud=00000&id_procedencia=2&url_imagen=0';
+	$fecha=getdate();
+	$day=$fecha["mday"]-1;
+	$month=$fecha["mon"];
+	$year=$fecha["year"];
+	$hour=$fecha["hours"]+17;
+	$minutes=$fecha["minutes"];
+	$seconds=$fecha["seconds"];
+	$form='id_cat_edad_solicitante=1&id_cat_delegacion_solicitante=1&id_colonia_solicitante=0&nombre_solicitante='.$nombre.'&ape_paterno_solicitante=&ape_materno_solicitante=&es_mujer=2&email_solicitante='.$correo.'&codigo_postal_solicitante=00000&descripcion_solicitud='.$descripcion.'&municipio_solicitante=&fecha_solicitud='.$year.'-'.$month.'-'.$day.'&hora_solicitud='.$hour.':'.$minutes.':'.$seconds.'&dentro_df_solicitud=0&id_cat_delegacion_solicitud=1&id_colonia_solicitud=0&calle_solicitud=&num_ext_solicitud=&num_int_solicitud=&geo_latitud_solicitud=19.4327133&geo_longitud_solicitud=-99.133854&estatus=1&codigo_postal_solicitud=00000&id_procedencia=2&url_imagen=0';
 
 	$authorization=base64_encode('ssac_admin:4t3nc1on_c1ud4d@n@!');
 	$json=json_decode($form);
@@ -789,7 +799,7 @@ function getInfoReglamento($jsonReglamento)
 	$num_articulos=count($jsonReglamento['response'])-1;
 	if($num_articulos>0)
 	{
-		for($i=0;$i<=$num_articulos;$i++)
+		for($i=0;$i<10;$i++)
 		{
 			$info=new infoReglamento();
 			$info->articulo=$jsonReglamento['response'][$i]["Articulo"];
