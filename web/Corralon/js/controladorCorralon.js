@@ -13,8 +13,8 @@ function mapa()
 
 	 if(lat && long)
         {
-		lat=parseFloat(lat)+0.0002;
-		long=parseFloat(long)-0.0002;
+		lat=parseFloat(lat);
+		long=parseFloat(long);
         }else{
 		lat=19.4327133;
 		long=-99.133854;
@@ -29,7 +29,7 @@ function mapa()
             map.getProjectionObject() // to Spherical Mercator Projection
           );
           
-    var zoom=17;
+    var zoom=18;
 
     var markers = new OpenLayers.Layer.Markers( "Markers" );
     map.addLayer(markers);
