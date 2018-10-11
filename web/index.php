@@ -541,7 +541,24 @@ function JsonReturn($Info,$sender,$modulo,$access_token)
 	return $jsonData;
 }
  
+function enviarForm($descripcion,$nombre,$correo)
+{
+	$url="http://www.atencionciudadana.cdmx.gob.mx/api_ssac/index.php/ssac/index";
+	$form='id_cat_edad_solicitante=1&id_cat_delegacion_solicitante=1&id_colonia_solicitante=0&nombre_solicitante=Prueba&ape_paterno_solicitante=&ape_materno_solicitante=&es_mujer=2&email_solicitante=Prueba&codigo_postal_solicitante=00000&descripcion_solicitud=Prueba&municipio_solicitante=&fecha_solicitud=2018-10-10&hora_solicitud=18:31:15&dentro_df_solicitud=0&id_cat_delegacion_solicitud=1&id_colonia_solicitud=0&calle_solicitud=&num_ext_solicitud=&num_int_solicitud=&geo_latitud_solicitud=19.4327133&geo_longitud_solicitud=-99.133854&estatus=1&codigo_postal_solicitud=00000&id_procedencia=2&url_imagen=0';
 
+	$authorization=base64_encode('ssac_admin:4t3nc1on_c1ud4d@n@!');
+	$json=json_decode($form);
+	$ch=curl_init();
+	curl_setopt($ch, CURLOPT_URL,$url);
+	curl_setopt($ch,CURLOPT_POST,1);
+	curl_setopt($ch,CURLOPT_POSTFIELDS,$form);
+	curl_setopt($ch,CURLOPT_HTTPHEADER,array('Content-Type: application/x-www-form-urlencoded','Authorization: Basic '.$authorization.''));
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	$result=curl_exec($ch);
+	curl_close($ch);
+	$result=json_decode($result,true);
+	return $result["data"];
+}
 
  function formularioSAC($sender,$selec)
  {
@@ -574,7 +591,8 @@ function JsonReturn($Info,$sender,$modulo,$access_token)
 				}';
  			break;
  		case 'enviarFormulario':
- 			consultarDenuncia($sender);
+ 			$info=consultarDenuncia($sender);
+ 			$folio=enviarForm($info["descripcion"],$info["nombre"],$info["correo"]);
  			$jsonData='{
 						"recipient":
 						{
@@ -582,7 +600,7 @@ function JsonReturn($Info,$sender,$modulo,$access_token)
 						},
 						"message":
 						{
-							"text":"Tu denuncia se ha enviado con exito"
+							"text":"Tu denuncia se ha enviado con exito, el folio de tu denuncia es '.$folio.'"
 						}
 				}';
  			break;
