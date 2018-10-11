@@ -5,7 +5,7 @@
 }
 header{
 	width:100%;
-	background: url('imagenes/header.svg');
+	background: url('http://ancient-brushlands-87186.herokuapp.com/ReglamentoTransito/imagenes/header.png');
 }
 
 header #titulo_mod {
@@ -15,7 +15,7 @@ header #titulo_mod {
 	vertical-align: middle;
 	font-weight: 5vw;
 	font-size: 5vh;
-	margin-top: 10%;
+	margin-top: 1%;
 }
 
 header img{
