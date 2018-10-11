@@ -989,7 +989,7 @@ function ReturnMessage($witEntities,$sender,$access_token)
 
 function Principal()
 {
-	$access_token="EAADlwZCSgxfgBAH8RYVcvWayahMjtVnMCtrXtNygol5eFGcwHaTbIaqUmMi34YcZCtQU4iz6mZCjePKphlPib987wJCFLxDs5CsU5YNJ6nVtvOJITrnY0q04MFnrhkNKvRqvKUXrCIsSjK5HPNpecHYusDRSojV9oJdqyOfaaidaK5cbYpG";
+	$access_token="EAADlwZCSgxfgBANx0KD9ngE0LhiWMz1xTlZBngvryNx7tDaoZCnsoktD2D19cWeG8B3MCUc3tAFNIhlRXLwRAuEvMBwPfWZCofRP0vEZAAtRQsoP8d0ZBGn4pHrRnIOmrZCHQfLpsGtZCmBic6srWiMsynFZAbXf7kZAMatZAxcQrKt7MW5PjZCgWXat";
 
 	$verify_token="SmartCDMX";
 	$hub_verify_token=null;
