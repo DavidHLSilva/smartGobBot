@@ -551,7 +551,7 @@ function enviarForm($descripcion,$nombre,$correo)
 	$day=$fecha["mday"]-1;
 	$month=$fecha["mon"];
 	$year=$fecha["year"];
-	$hour=$fecha["hours"]+17;
+	$hour=($fecha["hours"]+17)%24;
 	$minutes=$fecha["minutes"];
 	$seconds=$fecha["seconds"];
 	$form='id_cat_edad_solicitante=1&id_cat_delegacion_solicitante=1&id_colonia_solicitante=0&nombre_solicitante='.$nombre.'&ape_paterno_solicitante=&ape_materno_solicitante=&es_mujer=2&email_solicitante='.$correo.'&codigo_postal_solicitante=00000&descripcion_solicitud='.$descripcion.'&municipio_solicitante=&fecha_solicitud='.$year.'-'.$month.'-'.$day.'&hora_solicitud='.$hour.':'.$minutes.':'.$seconds.'&dentro_df_solicitud=0&id_cat_delegacion_solicitud=1&id_colonia_solicitud=0&calle_solicitud=&num_ext_solicitud=&num_int_solicitud=&geo_latitud_solicitud=19.4327133&geo_longitud_solicitud=-99.133854&estatus=1&codigo_postal_solicitud=00000&id_procedencia=2&url_imagen=0';
