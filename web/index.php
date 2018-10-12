@@ -544,11 +544,8 @@ function JsonReturn($Info,$sender,$modulo,$access_token)
 function enviarForm($descripcion,$nombre,$correo)
 {
 	$descripcion=str_replace(" ","%20",$descripcion);
-	$descripcion=str_replace(".","%2E",$descripcion);
 	$nombre=str_replace(" ","%20",$nombre);
-	$nombre=str_replace(".","%2E",$nombre);
 	$correo=str_replace("@","%40",$correo);
-	$correo=str_replace(".","%2E",$correo);
 	$url="http://www.atencionciudadana.cdmx.gob.mx/api_ssac/index.php/ssac/index";
 	$fecha=getdate();
 	$day=$fecha["mday"]-1;
