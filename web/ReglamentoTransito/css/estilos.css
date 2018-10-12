@@ -22,7 +22,6 @@ header img{
 }
 
 section{
-	height: auto;
 	width: 100%;
 }
 
@@ -45,8 +44,8 @@ section #titulo_mod {
 	vertical-align: middle;
 	font-weight: 7vw;
 	font-size: 7vh;
-	margin-top: 3%;
-	margin-left: 1%;
+	margin-top: 2.5%;
+	margin-left: 0;
 }
 
 section #imgReglamento{
@@ -54,11 +53,11 @@ section #imgReglamento{
 	width: 15%;
 	height: 15%;
 	vertical-align: middle;
-	max-width: 50px;
-	max-height: 50px;
+	max-width: 55px;
+	max-height: 55px;
 	min-width: 30px;
 	min-height:30px;
-	margin-top: 1%;
+	margin-top: 0;
 }
 
 section h2{
@@ -67,7 +66,7 @@ section h2{
 	color: #FB09AB;
 	font-weight: 900;
 	margin-bottom: 3%;
-	margin-top: 1.5%;
+	margin-top: 0.5%;
 	font-weight: 4vw;
 	font-size: 4vh;
 }
