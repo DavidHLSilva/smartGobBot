@@ -314,7 +314,7 @@ function JsonReturn($Info,$sender,$modulo,$access_token)
 
 		//El caso BTN_REGLAMENTO muestra información sobre el modo de uso del módulo del reglamento de tránsito
 		//Este caso es accionado cuando el bonton #reglamento del menú o del mensaje de saludo es seleccionado
-		case 'btn_reglamento':
+		/*case 'btn_reglamento':
 			$jsonData='{
 					"recipient":
 					{
@@ -325,7 +325,7 @@ function JsonReturn($Info,$sender,$modulo,$access_token)
 						"text":" Éste módulo te permite consultar información sobre el reglamento de tránsito de la CDMX. \n Para consultar el reglamento debes poner #reglamento \n  ;) "
 					}
 			}';			
-			break;
+			break;*/
 
 		case 'btn_atencionCiudadana':
 			$jsonData='{
@@ -867,7 +867,9 @@ function ReturnMessage($witEntities,$sender,$access_token)
 				enviar($jsonData,$access_token);
 				break;
 			case 'btn_reglamento':
-				$jsonData=JsonReturn(null,$sender,$witEntities->modulo,$access_token);
+				$jsonData=JsonReturn(null,$sender,'manualReglamento',$access_token);
+				enviar($jsonData,$access_token);
+				$jsonData=JsonReturn(null,$sender,'usuariosReglamento',$access_token);
 				enviar($jsonData,$access_token);
 				break;
 			case 'btn_atencionCiudadana':
