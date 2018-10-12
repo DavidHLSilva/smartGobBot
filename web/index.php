@@ -799,7 +799,7 @@ function getInfoReglamento($jsonReglamento)
 	$num_articulos=count($jsonReglamento['response'])-1;
 	if($num_articulos>0)
 	{
-		for($i=0;$i<10;$i++)
+		for($i=0;($i<10)&&($i<$num_articulos);$i++)
 		{
 			$info=new infoReglamento();
 			$info->articulo=$jsonReglamento['response'][$i]["Articulo"];
