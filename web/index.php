@@ -292,7 +292,7 @@ function JsonReturn($Info,$sender,$modulo,$access_token)
 					},
 					"message":
 					{
-						"text":" Éste módulo te permite consultar información sobre la calidad del aire de alguna delegación, para ello debes poner #aire y la delegación, por ejemplo\n #aire TLAHUAC\n  ;) "
+						"text":" Éste módulo te permite consultar información sobre la calidad del aire de alguna alcaldía, para ello debes poner #aire y la alcaldía, por ejemplo\n #aire TLAHUAC\n  ;) "
 					}
 			}';
 			break;
@@ -351,7 +351,7 @@ function JsonReturn($Info,$sender,$modulo,$access_token)
 						},
 						"message":
 						{
-							"text":"No encontré información relacionada con la delegación :/ . Un ejemplo de solicitud de calidad del aire podría ser:\n #aire IZTAPALAPA"
+							"text":"No encontré información relacionada con la alcaldía :/ . Un ejemplo de solicitud de calidad del aire podría ser:\n #aire IZTAPALAPA"
 						}
 				}';
 			}
