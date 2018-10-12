@@ -5,29 +5,20 @@
 }
 header{
 	width:100%;
-	background: url('http://ancient-brushlands-87186.herokuapp.com/ReglamentoTransito/imagenes/header.png');
-}
-
-header #titulo_mod {
-	color: white;
-	display: inline-block;
-	left: 1%;
-	vertical-align: middle;
-	font-weight: 5vw;
-	font-size: 5vh;
-	margin-top: 1%;
+	background: url('http://ancient-brushlands-87186.herokuapp.com/Corralon/imagenes/header.png');
 }
 
 header img{
-	display: inline-block;
-	width: 5%;
-	height: 5%;
-	margin-left: 5%;
+	width: 7%;
+	height: 7%;
 	vertical-align: middle;
 	max-width: 50px;
 	max-height: 50px;
 	min-width: 30px;
 	min-height:30px;
+	display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 section{
@@ -47,8 +38,30 @@ section img{
 	min-height:20px;
 }
 
-section h2{
+section #titulo_mod {
+	color: #FB09AB;
 	display: inline-block;
+	left: 1%;
+	vertical-align: middle;
+	font-weight: 7vw;
+	font-size: 7vh;
+	margin-top: 3%;
+	margin-left: 1%;
+}
+
+section #imgReglamento{
+	display: inline-block;
+	width: 15%;
+	height: 15%;
+	vertical-align: middle;
+	max-width: 50px;
+	max-height: 50px;
+	min-width: 30px;
+	min-height:30px;
+	margin-top: 1%;
+}
+
+section h2{
 	margin-left: 5%;
 	vertical-align: middle;
 	color: #FB09AB;

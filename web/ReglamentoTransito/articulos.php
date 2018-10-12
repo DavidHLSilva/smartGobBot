@@ -7,11 +7,13 @@
 </head>
 <body>
 	<header>
-		<img src="imagenes/ico_reglamento.svg">
-		<h1 id="titulo_mod"> Reglamento CDMX</h1>
+		<img src="imagenes/ico_smartcdmx.svg">
 	</header>
 
 	<section>
+
+		<img src="imagenes/ico_reglamento.svg" id="imgReglamento">
+		<h1 id="titulo_mod"> Reglamento CDMX</h1>
 
 		<?php
 			require_once('reglamento.php');

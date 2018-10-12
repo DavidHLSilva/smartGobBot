@@ -9,26 +9,17 @@ header{
 	background: url('http://ancient-brushlands-87186.herokuapp.com/Corralon/imagenes/header.png');
 }
 
-header #titulo_mod {
-	color: white;
-	display: inline-block;
-	left: 1%;
-	vertical-align: middle;
-	font-weight: 5vw;
-	font-size: 5vh;
-	margin-top: 1%;
-}
-
 header img{
-	display: inline-block;
 	width: 7%;
 	height: 7%;
-	margin-left: 5%;
 	vertical-align: middle;
 	max-width: 50px;
 	max-height: 50px;
 	min-width: 30px;
 	min-height:30px;
+	display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 #infoContainer{
@@ -68,6 +59,29 @@ section #infoContainer img{
 	min-width: 20px;
 	min-height:20px;
 	float: left;
+}
+
+#infoContainer #titulo_mod {
+	color: #FB09AB;
+	display: inline-block;
+	left: 1%;
+	vertical-align: middle;
+	font-weight: 7vw;
+	font-size: 7vh;
+	margin-top: 3%;
+	margin-left: 1%;
+}
+
+#infoContainer #imgCorralon{
+	display: inline-block;
+	width: 15%;
+	height: 15%;
+	vertical-align: middle;
+	max-width: 50px;
+	max-height: 50px;
+	min-width: 30px;
+	min-height:30px;
+	margin-top: 3%;
 }
 
 section #infoContainer #titulo_dir{
