@@ -6,6 +6,7 @@
 header{
 	width:100%;
 	background: url('http://ancient-brushlands-87186.herokuapp.com/Corralon/imagenes/header.png');
+	min-width: 80rem;
 }
 
 header #titulo_mod {
@@ -26,8 +27,8 @@ header img{
 	vertical-align: middle;
 	max-width: 50px;
 	max-height: 50px;
-	min-width: 15px;
-	min-height:15px;
+	min-width: 6dpi;
+	min-height:6dpi;
 	margin-top: 0%;
 	margin-left: 1%;
 }
@@ -45,7 +46,9 @@ header #icoSmartcdmx{
 }
 
 section{
-	width: 100%;
+	min-width: 80rem;
+	min-height: 50rem;
+
 }
 
 section img{
@@ -56,8 +59,8 @@ section img{
 	vertical-align: middle;
 	max-width: 50px;
 	max-height: 50px;
-	min-width: 20px;
-	min-height:20px;
+	min-width: 2rem;
+	min-height:2rem;
 }
 
 section h2{
@@ -108,5 +111,4 @@ footer{
 	height: 10%;
 	max-height: 50px;
 	min-height:30px;
-	width:100%;
 }
