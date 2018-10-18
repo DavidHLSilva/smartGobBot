@@ -373,10 +373,9 @@ function JsonReturn($Info,$sender,$modulo,$access_token)
 				}
 				$image="http://ancient-brushlands-87186.herokuapp.com/imagenes/Climas_bot/".$Info->image;
 
-				$title=$Info->name." ".$Info->temperatura."°C";
-				$subtitle=$Info->indice;
-
-				if (strnatcasecmp($Info->indice,"SIN COBERTURA")==0) {
+				if ($Info->indice) {
+					$title=$Info->name." ".$Info->temperatura."°C";
+					$subtitle=$Info->indice;
 					$jsonData='{
 							"recipient":{
 									"id":"'. $sender .'"
@@ -402,6 +401,8 @@ function JsonReturn($Info,$sender,$modulo,$access_token)
 				}
 				else
 				{
+					$title=$Info->name." ".$Info->temperatura."°C";
+					$subtitle=$Info->imecaPoints.' IMECA\nCalidad del Aire '.$Info->indice.'\n'.$Info->recomendacion;
 					$jsonData='{
 							"recipient":{
 									"id":"'. $sender .'"
