@@ -34,18 +34,20 @@ header img{
 }
 
 header #icoSmartcdmx{
-	width: 1%;
-	height: 1%;
+	width: 10%;
+	height: 10%;
 	display: inline-block;
 	vertical-align: middle;
 	max-width: 50px;
 	max-height: 50px;
-	min-width: 15px;
-	min-height:15px;
+	min-width:6dpi;
+	min-height:6dpi;
 	margin-left: 1%;
 }
 
 section{
+	width: 100%;
+	height: auto;
 	min-width: 80rem;
 	min-height: 50rem;
 

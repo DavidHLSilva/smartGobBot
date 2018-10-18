@@ -4,12 +4,13 @@
 	<meta charset="UTF-8">
 	<title>Reglamento CDMX</title>
 	<link rel="stylesheet" type="text/css" href="css/estilos.css">
+	<meta  name="viewport" content="initial-scale=1">
 </head>
 <body>
 	<header>
 		<img src="imagenes/ico_reglamento.svg" id="imgReglamento">
 		<h1 id="titulo_mod"> Reglamento CDMX</h1>
-		<img src="imagenes/ico_smartcdmx.svg">
+		<img src="imagenes/ico_smartcdmx.svg" id="icoSmartcdmx">
 	</header>
 
 	<section>
