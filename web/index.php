@@ -373,7 +373,7 @@ function JsonReturn($Info,$sender,$modulo,$access_token)
 				}
 				$image="http://ancient-brushlands-87186.herokuapp.com/imagenes/Climas_bot/".$Info->image;
 
-				if ($Info->indice) {
+				if (strcmp($Info->indice,"SIN COBERTURA")===0) {
 					$title=$Info->name." ".$Info->temperatura."°C";
 					$subtitle=$Info->indice;
 					$jsonData='{
