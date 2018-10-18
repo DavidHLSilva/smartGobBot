@@ -1035,6 +1035,17 @@ function Principal()
 			//si el usuario envió un mensaje sutituimos los @ por su respectivo código url %40
 			// puedes consultar los codigos url en https://es.wikipedia.org/wiki/C%C3%B3digo_porciento
 			$message=str_replace("@","%40",$message);
+			$message=str_replace("Á","A",$message);
+			$message=str_replace("á","a",$message);
+			$message=str_replace("É","E",$message);
+			$message=str_replace("é","e",$message);
+			$message=str_replace("Í","I",$message);
+			$message=str_replace("í","i",$message);
+			$message=str_replace("Ó","O",$message);
+			$message=str_replace("ó","o",$message);
+			$message=str_replace("Ú","U",$message);
+			$message=str_replace("ú","u",$message);
+			$message=str_replace("?","%3F",$message);
 			$response_wit=wit_response($message);
 			ReturnMessage($response_wit,$sender,$access_token);
 		}
