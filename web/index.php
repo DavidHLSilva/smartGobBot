@@ -572,6 +572,7 @@ function JsonReturn($Info,$sender,$modulo,$access_token)
 function enviarForm($descripcion,$nombre,$correo)
 {
 	$descripcion=str_replace(" ","%20",$descripcion);
+	$descripcion=str_replace("#atencionCiudadana","%20",$descripcion);
 	$nombre=str_replace(" ","%20",$nombre);
 	$correo=str_replace("@","%40",$correo);
 	$url="http://www.atencionciudadana.cdmx.gob.mx/api_ssac/index.php/ssac/index";
