@@ -1046,7 +1046,7 @@ function Principal()
 			die;
 		}
 	}
-	/*
+	
 	$input=json_decode(file_get_contents('php://input'), true);
 	$sender=$input['entry'][0]['messaging'][0]['sender']['id'];
 	$message=isset($input['entry'][0]['messaging'][0]['message']['text'])? $input['entry'][0]['messaging'][0]['message']['text']:'';
@@ -1089,10 +1089,10 @@ function Principal()
 			}
 			else
 			{*/
-				//$btn_selec=new boton_Seleccionado();
-				//$payload_div=explode(" ",$selec_btn);
-				//$sub_strings=count($payload_div);
-				//$btn_selec->modulo=$payload_div[0];
+				$btn_selec=new boton_Seleccionado();
+				$payload_div=explode(" ",$selec_btn);
+				$sub_strings=count($payload_div);
+				$btn_selec->modulo=$payload_div[0];
 
 				/*if((strcmp($payload_div[0],'leer_art')===0)||(strcmp($payload_div[0],'sanciones_art')===0))
 				{
@@ -1105,13 +1105,13 @@ function Principal()
 				elseif((strcmp($payload_div[0],'resumen_art')===0)||(strcmp($payload_div[0],'completo_art')===0))
 				{
 					$btn_selec->articulo=$payload_div[1];
-				}
+				}*/
 
-				//ReturnMessage($btn_selec,$sender,$access_token);
+				ReturnMessage($btn_selec,$sender,$access_token);
 			//}
 		}
 		
-	}*/
+	}
 }
 
 Principal();
