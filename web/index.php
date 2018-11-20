@@ -1030,9 +1030,9 @@ function ReturnMessage($witEntities,$sender,$access_token)
 
 function Principal()
 {
-	$access_token="EAADlwZCSgxfgBANx0KD9ngE0LhiWMz1xTlZBngvryNx7tDaoZCnsoktD2D19cWeG8B3MCUc3tAFNIhlRXLwRAuEvMBwPfWZCofRP0vEZAAtRQsoP8d0ZBGn4pHrRnIOmrZCHQfLpsGtZCmBic6srWiMsynFZAbXf7kZAMatZAxcQrKt7MW5PjZCgWXat";
+	$access_token="EAAEKSsS9kwMBAOXcyHaFFeO0qySfi9TyBTPI7gaupsHIUTDV6vIx47HI6V4bZBl0uz96v5qMsZCQxGrmssUCeCMye7geIrAEbMvdbj9ZAYptbmpZB7CNqz26Mbk1BURZBcGgBmZAU7xG9oCetc5KbtsaGy0ZAd8dE1LMyBXhTDc6gZDZD";
 
-	$verify_token="SmartCDMX";
+	$verify_token="SmartGobPruebas";
 	$hub_verify_token=null;
 	
 	if(isset($_REQUEST['hub_mode'])&& $_REQUEST['hub_mode']=='subscribe')
@@ -1046,7 +1046,7 @@ function Principal()
 			die;
 		}
 	}
-	
+	/*
 	$input=json_decode(file_get_contents('php://input'), true);
 	$sender=$input['entry'][0]['messaging'][0]['sender']['id'];
 	$message=isset($input['entry'][0]['messaging'][0]['message']['text'])? $input['entry'][0]['messaging'][0]['message']['text']:'';
@@ -1089,10 +1089,10 @@ function Principal()
 			}
 			else
 			{*/
-				$btn_selec=new boton_Seleccionado();
-				$payload_div=explode(" ",$selec_btn);
-				$sub_strings=count($payload_div);
-				$btn_selec->modulo=$payload_div[0];
+				//$btn_selec=new boton_Seleccionado();
+				//$payload_div=explode(" ",$selec_btn);
+				//$sub_strings=count($payload_div);
+				//$btn_selec->modulo=$payload_div[0];
 
 				/*if((strcmp($payload_div[0],'leer_art')===0)||(strcmp($payload_div[0],'sanciones_art')===0))
 				{
@@ -1105,13 +1105,13 @@ function Principal()
 				elseif((strcmp($payload_div[0],'resumen_art')===0)||(strcmp($payload_div[0],'completo_art')===0))
 				{
 					$btn_selec->articulo=$payload_div[1];
-				}*/
+				}
 
-				ReturnMessage($btn_selec,$sender,$access_token);
+				//ReturnMessage($btn_selec,$sender,$access_token);
 			//}
 		}
 		
-	}
+	}*/
 }
 
 Principal();
